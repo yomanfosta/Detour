@@ -101,8 +101,20 @@ a {
   overflow: hidden;
   -webkit-transform: translateZ(0);
 }
+@media (max-width: 768px) {
+  /* line 27, ../sass/_main.scss */
+  #map-canvas {
+    height: 150%;
+  }
+}
+@media (max-width: 550px) {
+  /* line 27, ../sass/_main.scss */
+  #map-canvas {
+    height: 200%;
+  }
+}
 
-/* line 37, ../sass/_main.scss */
+/* line 44, ../sass/_main.scss */
 html {
   height: 100%;
 }
@@ -269,11 +281,6 @@ html {
 }
 
 /* line 31, ../sass/_menu.scss */
-.icon:hover {
-  background: rgba(255, 255, 255, 0.75);
-}
-
-/* line 35, ../sass/_menu.scss */
 .menu {
   position: absolute;
   top: -100px;
@@ -286,7 +293,7 @@ html {
   z-index: -5;
 }
 
-/* line 47, ../sass/_menu.scss */
+/* line 43, ../sass/_menu.scss */
 .spread {
   position: absolute;
   top: -80px;
@@ -295,95 +302,138 @@ html {
   transition: all 0.5s 0.1s;
 }
 
-/* line 55, ../sass/_menu.scss */
+/* line 51, ../sass/_menu.scss */
 .icon:hover {
   /* Where all the MAGIC happens: */
 }
-/* line 56, ../sass/_menu.scss */
+/* line 52, ../sass/_menu.scss */
 .icon:hover .menu {
   transition: transform 0.4s 0.08s, z-index 0s 0.5s;
   transform: scale(1);
   z-index: 5;
 }
-/* line 62, ../sass/_menu.scss */
+/* line 58, ../sass/_menu.scss */
 .icon:hover .spread, .icon:hover .unit {
   transition: all 0.6s;
 }
-/* line 68, ../sass/_menu.scss */
+/* line 64, ../sass/_menu.scss */
 .icon:hover .spread:nth-child(1) {
   transition-delay: 0.02s;
   transform: rotate(81deg);
 }
-/* line 71, ../sass/_menu.scss */
+/* line 67, ../sass/_menu.scss */
 .icon:hover .spread:nth-child(1) .unit {
   transition-delay: 0.04s;
   transform: rotate(639deg);
 }
-/* line 68, ../sass/_menu.scss */
+/* line 64, ../sass/_menu.scss */
 .icon:hover .spread:nth-child(2) {
   transition-delay: 0.04s;
   transform: rotate(117deg);
 }
-/* line 71, ../sass/_menu.scss */
+/* line 67, ../sass/_menu.scss */
 .icon:hover .spread:nth-child(2) .unit {
   transition-delay: 0.08s;
   transform: rotate(603deg);
 }
-/* line 68, ../sass/_menu.scss */
+/* line 64, ../sass/_menu.scss */
 .icon:hover .spread:nth-child(3) {
   transition-delay: 0.06s;
   transform: rotate(153deg);
 }
-/* line 71, ../sass/_menu.scss */
+/* line 67, ../sass/_menu.scss */
 .icon:hover .spread:nth-child(3) .unit {
   transition-delay: 0.12s;
   transform: rotate(567deg);
 }
-/* line 68, ../sass/_menu.scss */
+/* line 64, ../sass/_menu.scss */
 .icon:hover .spread:nth-child(4) {
   transition-delay: 0.08s;
   transform: rotate(189deg);
 }
-/* line 71, ../sass/_menu.scss */
+/* line 67, ../sass/_menu.scss */
 .icon:hover .spread:nth-child(4) .unit {
   transition-delay: 0.16s;
   transform: rotate(531deg);
 }
-/* line 68, ../sass/_menu.scss */
+/* line 64, ../sass/_menu.scss */
 .icon:hover .spread:nth-child(5) {
   transition-delay: 0.1s;
   transform: rotate(225deg);
 }
-/* line 71, ../sass/_menu.scss */
+/* line 67, ../sass/_menu.scss */
 .icon:hover .spread:nth-child(5) .unit {
   transition-delay: 0.2s;
   transform: rotate(495deg);
 }
 
 /* END .icon:hover */
-/* line 79, ../sass/_menu.scss */
+/* line 75, ../sass/_menu.scss */
 .unit {
   position: absolute;
-  background: white;
   font-size: 60%;
   text-decoration: none;
   width: 40px;
   height: 40px;
   line-height: 40px;
-  color: #3d7899;
   border-radius: 50%;
   transition: 0.6s;
   border: 1px solid #f7931e;
+  background-color: white;
 }
-/* line 91, ../sass/_menu.scss */
+/* line 86, ../sass/_menu.scss */
 .unit:hover {
-  background: #ffecdc;
+  background-color: #ffecdc;
 }
 
 /* MEE */
-/* line 96, ../sass/_menu.scss */
+/* line 91, ../sass/_menu.scss */
 .menu-area {
   position: absolute;
-  bottom: 110px;
-  left: 50px;
+  bottom: -140px;
+  left: 0px;
+  z-index: 3;
+}
+
+/* line 98, ../sass/_menu.scss */
+.restaurants {
+  background: url("../images/menu-icon-eat.svg") no-repeat scroll 50% center/70% auto white;
+}
+
+/* line 101, ../sass/_menu.scss */
+.gas-stations {
+  background: url("../images/menu-icon-gas.svg") no-repeat scroll 56% center/40% auto white;
+}
+
+/* line 104, ../sass/_menu.scss */
+.sites {
+  background: url("../images/menu-icon-sites.svg") no-repeat scroll 45% center/70% auto white;
+}
+
+/* line 107, ../sass/_menu.scss */
+.nature {
+  background: url("../images/menu-icon-nature.svg") no-repeat scroll 52% center/65% auto white;
+}
+
+/* line 1, ../sass/_directions.scss */
+#directions {
+  -webkit-transition-duration: 0.6s;
+  -moz-transition-duration: 0.6s;
+  -o-transition-duration: 0.6s;
+  transition-duration: 0.6s;
+  background: white;
+  height: 100%;
+  margin-top: -50px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  position: fixed;
+  top: 100%;
+  visibility: visible;
+  max-width: 800px;
+  z-index: 4;
+}
+/* line 14, ../sass/_directions.scss */
+#directions.pulled {
+  margin-top: 0;
+  top: 0;
 }
