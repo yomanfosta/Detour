@@ -67,23 +67,44 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
 body {
   font-family: 'Lato', sans-serif;
   font-size: 18px;
-}
-
-/* line 6, ../sass/_main.scss */
-.container {
-  max-width: 800px;
-  margin: 0 auto;
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 /* line 11, ../sass/_main.scss */
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+/* line 18, ../sass/_main.scss */
 section {
   width: 100%;
 }
 
-/* line 15, ../sass/_main.scss */
+/* line 22, ../sass/_main.scss */
 a {
   text-decoration: none;
   color: inherit;
+}
+
+/* line 27, ../sass/_main.scss */
+#map-canvas {
+  position: relative;
+  margin-top: -350px;
+  height: 100%;
+  z-index: 0;
+  background-color: #e5e3df;
+  overflow: hidden;
+  -webkit-transform: translateZ(0);
+}
+
+/* line 37, ../sass/_main.scss */
+html {
+  height: 100%;
 }
 
 /* line 1, ../sass/_header.scss */
