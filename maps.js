@@ -6,11 +6,6 @@ var end;
 var detours; //the detours we have selected
 var availableDetours; //available ones we haven't selected
 
-<<<<<<< HEAD
-
-
-	///////////////////////////////////////////////////////////////////////
-	//Configure key/url's
 	var config = {
 		apiKey: 'RT3RC2PZXYLJJKVRD0P1THAIWLTHBHSWB3ENEGD4QRWLJ1G3',
 		authUrl: 'https://foursquare.com/',
@@ -22,11 +17,6 @@ var availableDetours; //available ones we haven't selected
 	};
 
 	console.log("Values configured!");
-
-
-
-
-
 
 	function doAuthRedirect() {
 		var redirect = window.location.href.replace(window.location.hash, '');
@@ -62,12 +52,6 @@ for (var i = 0; i < GPSCoords.length;i++)
 }
 
 
-
-
-
-
-
-=======
 function init(){
     console.log("Init!");
     directionsDisplay = new google.maps.DirectionsRenderer();
@@ -212,4 +196,3 @@ function test()
 }
 
 google.maps.event.addDomListener(window, 'load', init);
->>>>>>> 2447079fe96324d43e158479a272660d3e3448df
