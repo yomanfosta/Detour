@@ -230,9 +230,9 @@ function reRoute()
 			directionsDisplay.setDirections(response);
 			directionsDisplay.setPanel(document.getElementById("directions"));
 			time = 0;
-			for(leg in response.routes[0].legs)
+			for(var i=0;i<response.routes[0].legs.length;i++)
 			{
-				time+= leg.duration.value;
+				time+= response.routes[0].legs[i].duration.value;
 			}
 		}
 	});
