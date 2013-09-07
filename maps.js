@@ -5,7 +5,6 @@ var start;
 var end;
 var detours; //the detours we have selected
 var availableDetours; //available ones we haven't selected
-var locationMarkers = {} //a giant array of markers for all the locations we get from foursquare
 
 function init(){
     console.log("Init!");
@@ -96,33 +95,31 @@ function detourClicked(location)
 //gets our directions and returns an array of waypoints
 function getdirections()
 {
-
-		
 	var request = 
 	{
 		origin: start,
-		waypoints: detours,
+		waypoints : detours,
 		optimizeWaypoints: true,
 		destination: end,
 		travelMode: google.maps.DirectionsTravelMode.DRIVING
 	};
-	var waypointsStrs = new Array();
 	directionsService.route(request, function(response,status) 
-    {
-      
-      if (status == google.maps.DirectionsStatus.OK) 
-      {
-        var waypoints = response.routes[0].overview_path;
-        directionsDisplay.setDirections(response);
-        
-        for(var i =0;i<waypoints.length;i++)
-        {
-          waypointsStrs[i] = waypoints[i].ob.toString() + ',' + waypoints[i].pb.toString();
-          console.log(waypointsStrs[i]); //prints to console
-        }
-      }
-    });
-  return waypointsStrs;
+		{
+			if (status == google.maps.DirectionsStatus.OK) 
+			{
+			  directionsDisplay.setDirections(response);
+			  //LatLngs
+			  var waypoints = response.routes[0].overview_path;
+			  var waypointStrs = new Array();
+			  for(var i=0; i<waypoints.length;i++)
+			  {
+				  waypointStrs[i] = waypoints[i].lat().toString() + ',' + waypoints[i].lng().toString();
+			  }
+			  return waypointStrs;
+			}
+			else
+				return null;
+		});
 }
 
 function getFourSquareLocations(waypoints)
