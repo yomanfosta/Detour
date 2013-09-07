@@ -6,9 +6,6 @@ var end;
 var detours; //the detours we have selected
 var availableDetours; //available ones we haven't selected
 var locationMarkers = {} //a giant array of markers for all the locations we get from foursquare
-	
-	
-}
 
 function init(){
     console.log("Init!");
@@ -31,24 +28,25 @@ function init(){
     
     startElement.addEventListener('blur',startendChange);
     endElement.addEventListener('blur',startendChange);
-    test();
+    //test();
 }
 
-//is called whenever something is changed..
+//start and end have changed, reset everything!
 function startendChange()
 {
-	start = getElementById("start-loc").value;
-	end = getElementById("end-loc").value;
+	start = document.getElementById("start-loc").value;
+	end = document.getElementById("end-loc").value;
 	detours = new Array();
 	var waypoints = getdirections(); //should be an array of strings
 	availableDetours = new Array();
-	for(int i=0;i<waypoints.length;i++)
+	for(var i=0;i<waypoints.length;i++)
 	{
 		var fsi = foursquareinfo(waypoints[0]);
 		//fsi should have the following properties
 			//marker: a google.maps>Marker //this should already pin it to the map and icon defined based on enabled param
 			//rating: number
 			//enabled: false; by default
+		//add an eventlistener to the marker
 		availableDetours[i] = fsi;
 	}
 }
@@ -56,15 +54,43 @@ function startendChange()
 function foursquareinfo(waypoint)
 {
 	var fsi= {
-		marker: new google.maps.Marker(google.maps.LatLng,"title");
-		rating: 0;//foursquare rating
-		enabled: false;
-	}
+		marker: new google.maps.Marker(google.maps.LatLng,"title"),
+		rating: 0,//foursquare rating
+		enabled: false
+	};
 }
 
-function detourAdded(location)
+function detourClicked(location)
 {
-	
+	//called by eventlistener on markers, location is the marker
+	for(var i=0;i<availableDetours.length;i++)
+	{
+		if(availableDetours[i].marker.position === location.position)
+		{
+			availableDetours[i].marker.icon = enabledIcon;
+			if(availableDetours[i].enabled ===false) //we're adding a detour
+			{
+				availableDetours[i].enabled = true;
+				detours[detours.length] = availableDetours[i];	
+			}
+			else //we're getting rid of a detour
+			{
+				var array2 = new Array();
+				for(var j=0; j<detours.length;j++)
+				{
+					if(detours[j] !== availableDetours[i])
+						array2[j] = detours[j];
+				}
+				detours = array2;
+				availableDetours[i].enabled = false;
+				availableDetours.marker.icon = disabledIcon;
+						
+				
+			}
+			break;
+		}
+
+	}
 }
 
 //gets our directions and returns an array of waypoints
