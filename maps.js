@@ -8,33 +8,33 @@ var availableDetours; //available ones we haven't selected
 var GPSCoords;
 var radius = 20;
 var METERS = 1609;
-	
-//Configure key/url's
-	var config = {
-		apiKey: 'RT3RC2PZXYLJJKVRD0P1THAIWLTHBHSWB3ENEGD4QRWLJ1G3',
-		authUrl: 'https://foursquare.com/',
-		apiUrl: 'https://api.foursquare.com/',
-		clientSecret: 'ZZRKY01HN3YBFACKRUR1GSEBWZKKPKZOAXQR540PFRFG3PEV'
-		
 
-	};	
+//Configure key/url's
+var config = {
+	apiKey: 'RT3RC2PZXYLJJKVRD0P1THAIWLTHBHSWB3ENEGD4QRWLJ1G3',
+	authUrl: 'https://foursquare.com/',
+	apiUrl: 'https://api.foursquare.com/',
+	clientSecret: 'ZZRKY01HN3YBFACKRUR1GSEBWZKKPKZOAXQR540PFRFG3PEV'
+
+
+};	
 
 
 function init(){
-    console.log("Init!");
-    directionsDisplay = new google.maps.DirectionsRenderer();
-    start = '';
-    end = '';
-    detours = new Array();
-    var mapOptions = 
-    {
-    zoom: 8,
-    center: new google.maps.LatLng((39.952335), -75.163789),
-    mapTypeId: google.maps.MapTypeId.ROADMAP
+	console.log("Init!");
+	directionsDisplay = new google.maps.DirectionsRenderer();
+	start = '';
+	end = '';
+	detours = new Array();
+	var mapOptions = 
+	{
+		zoom: 8,
+		center: new google.maps.LatLng((39.952335), -75.163789),
+		mapTypeId: google.maps.MapTypeId.ROADMAP
 	}
-    map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
-    directionsDisplay.setMap(map);
-    
+	map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+	directionsDisplay.setMap(map);
+
     //add event listener to inputs
     var startElement = document.getElementById("start-loc");
     var endElement = document.getElementById("end-loc");
@@ -104,16 +104,28 @@ function getdirections()
 		travelMode: google.maps.DirectionsTravelMode.DRIVING
 	};
 	directionsService.route(request, function(response,status) 
+	{
+		if (status == google.maps.DirectionsStatus.OK) 
 		{
-			if (status == google.maps.DirectionsStatus.OK) 
-			{
-			  directionsDisplay.setDirections(response);
+			directionsDisplay.setDirections(response);
 			  //LatLngs
+			  var counter = 0;
 			  var waypoints = response.routes[0].overview_path;
 			  var waypointStrs = new Array();
 			  for(var i=0; i<waypoints.length;i++)
 			  {
-				  waypointStrs[i] = waypoints[i].lat().toString() + ',' + waypoints[i].lng().toString();
+			  	if(i%5 === 0)
+			  	{
+
+			  		var num1 = new Number(waypoints[i].lat());
+			  		var LAT = num1.toFixed(2); 
+
+			  		var num2 = new Number(waypoints[i].lng());
+			  		var LNG = num2.toFixed(2); 
+
+			  		waypointStrs[counter] = LAT.toString() + ',' + LNG.toString();
+			  		counter++;
+			  	}
 			  }
 			  //console.log(waypointStrs);
 
@@ -121,7 +133,7 @@ function getdirections()
 			  console.log("before for loop");
 			  for(var i =0; i <GPSCoords.length; i++)
 			  	getVenues(i);
-			  console.log("Reached the end of getdirections");
+			  //console.log("Reached the end of getdirections");
 
 			}
 			else
@@ -142,7 +154,7 @@ function getVenues(i)
 	//console.log("This is LOCATIONS: " + LOCATIONS{});
 	//var names = response.groups.items.venue.name;
 	//console.log(names);
-	console.log("finished getVenues");
+	//console.log("finished getVenues");
 
 }
 
