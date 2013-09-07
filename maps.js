@@ -6,8 +6,22 @@ var end;
 var detours; //the detours we have selected
 var availableDetours; //available ones we haven't selected
 var GPSCoords;
-var radius = 20;
+var defRadius = 20;
 var METERS = 1609;
+var VENUES;
+var NATUREVENUES = {
+	b: true,
+	id: '4d4b7105d754a06377d81259'
+};
+var FOODVENUES = {
+	b: true,
+	id: '4d4b7105d754a06374d81259'
+};
+var ATTRACTIONVENUES = {
+	b: true,
+	id: '4bf58dd8d48988d12d941735'
+};
+
 
 //Configure key/url's
 var config = {
@@ -20,12 +34,14 @@ var config = {
 };	
 
 
+
 function init(){
 	console.log("Init!");
 	directionsDisplay = new google.maps.DirectionsRenderer();
 	start = '';
 	end = '';
 	detours = new Array();
+	VENUES = {};
 	var mapOptions = 
 	{
 		zoom: 8,
@@ -38,11 +54,14 @@ function init(){
     //add event listener to inputs
     var startElement = document.getElementById("start-loc");
     var endElement = document.getElementById("end-loc");
+    var radius = document.getElementById("distance");
     
     startElement.addEventListener('blur',startendChange);
     endElement.addEventListener('blur',startendChange);
+    radius.addEventListener('blur', startendChange);
     //test();
 }
+
 
 //start and end have changed, reset everything!
 //start and end have changed, reset everything!
@@ -50,7 +69,8 @@ function startendChange()
 {
 	start = document.getElementById("start-loc").value;
 	end = document.getElementById("end-loc").value;
-	if(start === '' || end === '')
+	defRadius = document.getElementById("distance").value;
+		if(start === '' || end === '')
 		return;
 	detours = new Array();
 	console.log("Before getdirections");
@@ -134,6 +154,7 @@ function getdirections()
 			  for(var i =0; i <GPSCoords.length; i++)
 			  	getVenues(i);
 			  //console.log("Reached the end of getdirections");
+			  console.log("getVenues called");
 
 			}
 			else
@@ -145,14 +166,28 @@ function getdirections()
 
 function getVenues(i)
 {
-	console.log("getVenues called");
-	var RADIUS = radius*METERS;
-	var URL = config.apiUrl + 'v2/venues/explore?ll=' + GPSCoords[i] + '&limit=5' + '&radius=' + RADIUS.toString() + '&client_id=' + config.apiKey + '&clientSecret=' + config.clientSecret;
-	//console.log(URL);
-	var LOCATIONS = $.getJSON(URL);
-	//console.log("This is LOCATIONS: " + LOCATIONS);
+
+	var RADIUS = defRadius*METERS;
+	var CATEGORIES = '';
+	if(FOODVENUES.b === true)
+		CATEGORIES += FOODVENUES.id;
+	else if(NATUREVENUES.b === true)
+		CATEGORIES += ',' + NATUREVENUES.id;
+	else if(ATTRACTIONVENUES.b === true)
+		CATEGORIES += ',' + ATTRACTIONVENUES.id;
+
+	var URL = config.apiUrl + 'v2/venues/explore?ll=' + GPSCoords[i] + '&limit=5' + '&radius=' + RADIUS.toString() + '&categoryid=' + CATEGORIES +  '&client_id=' +  config.apiKey + '&client_secret=' + config.clientSecret;
+	
+	$.getJSON(URL, function(data){
+		VENUES[data.response.groups[0].items[0].venue.id] = {name: data.response.groups[0].items[0].venue.name, lat: data.response.groups[0].items[0].venue.location.lat, lng: data.response.groups[0].items[0].venue.location.lng};
+
+	});
+
+
+
+	// console.log("This is LOCATIONS: " + LOCATIONS);
 	//console.log("This is LOCATIONS: " + LOCATIONS{});
-	//var names = response.groups.items.venue.name;
+	// var names = response.groups.items.venue.name;
 	//console.log(names);
 	//console.log("finished getVenues");
 
