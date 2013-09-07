@@ -65,19 +65,22 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
 
 /* line 1, ../sass/_main.scss */
 body {
-  max-width: 800px;
-  margin: 0 auto;
   font-family: 'Lato', sans-serif;
   font-size: 18px;
-  background: url("../images/mapbg.jpg");
 }
 
-/* line 9, ../sass/_main.scss */
+/* line 6, ../sass/_main.scss */
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* line 11, ../sass/_main.scss */
 section {
   width: 100%;
 }
 
-/* line 13, ../sass/_main.scss */
+/* line 15, ../sass/_main.scss */
 a {
   text-decoration: none;
   color: inherit;
@@ -188,6 +191,31 @@ a {
 /* line 57, ../sass/_info.scss */
 .distance-sent {
   text-align: center;
+  font-size: 36px;
+}
+@media (max-width: 768px) {
+  /* line 57, ../sass/_info.scss */
+  .distance-sent {
+    font-size: 30px;
+  }
+}
+@media (max-width: 550px) {
+  /* line 57, ../sass/_info.scss */
+  .distance-sent {
+    font-size: 23px;
+  }
+}
+@media (max-width: 420px) {
+  /* line 57, ../sass/_info.scss */
+  .distance-sent {
+    font-size: 18px;
+  }
+}
+@media (max-width: 320px) {
+  /* line 57, ../sass/_info.scss */
+  .distance-sent {
+    font-size: 14px;
+  }
 }
 
 /* [1] */
