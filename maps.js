@@ -5,51 +5,19 @@ var start;
 var end;
 var detours; //the detours we have selected
 var availableDetours; //available ones we haven't selected
-
+var GPSCoords;
+var radius = 20;
+var METERS = 1609;
+	
+//Configure key/url's
 	var config = {
 		apiKey: 'RT3RC2PZXYLJJKVRD0P1THAIWLTHBHSWB3ENEGD4QRWLJ1G3',
 		authUrl: 'https://foursquare.com/',
 		apiUrl: 'https://api.foursquare.com/',
-		METERS: 1609,
-		radius: 20,
-	    GPSCoords: getdirections() //33.40,54.27
+		clientSecret: 'ZZRKY01HN3YBFACKRUR1GSEBWZKKPKZOAXQR540PFRFG3PEV'
+		
 
-	};
-
-	console.log("Values configured!");
-
-	function doAuthRedirect() {
-		var redirect = window.location.href.replace(window.location.hash, '');
-
-
-
-		var url = config.authUrl + 'oauth2/authenticate?response_type=token&client_id=' + config.apiKey +'&redirect_uri=' + encodeURIComponent(redirect) +'&state=' + encodeURIComponent($.bbq.getState('req') || 'users/self');
-		window.location.href = url;
-	};
-
-	if ($.bbq.getState('access_token')) {
-	// If there is a token in the state, consume it
-	var token = $.bbq.getState('access_token');
-	$.bbq.pushState({}, 2)
-} else if ($.bbq.getState('error')) {
-} else {
-	doAuthRedirect();
-}	
-console.log("test");
-
-
-
-console.log("it worked!");
-
-
-//Function that makes the calls to the Foursquare API
-
-
-for (var i = 0; i < GPSCoords.length;i++) 
-{
-	var URL = config.apiUrl + 'v2/venues/explore?ll=' + '40.00,-75.13' + '&limit=5' + '&intent=browse' + '&radius=' + '1000' + '&oauth_token=' + window.token;
-	$.getJSON(URL);
-}
+	};	
 
 
 function init(){
@@ -77,35 +45,21 @@ function init(){
 }
 
 //start and end have changed, reset everything!
+//start and end have changed, reset everything!
 function startendChange()
 {
 	start = document.getElementById("start-loc").value;
 	end = document.getElementById("end-loc").value;
+	if(start === '' || end === '')
+		return;
 	detours = new Array();
-	var waypoints = getdirections(); //should be an array of strings
-	availableDetours = new Array();
-	for(var i=0;i<waypoints.length;i++)
-	{
-		var fsi = foursquareinfo(waypoints[0]);
-		//fsi should have the following properties
-			//marker: a google.maps>Marker //this should already pin it to the map and icon defined based on enabled param
-			//rating: number
-			//enabled: false; by default
-		//add an eventlistener to the marker
-		availableDetours[i] = fsi;
-	}
+	console.log("Before getdirections");
+	getdirections(); //should be an array of strings
+
+	
 }
 
-function foursquareinfo(waypoint)
-{
-	var fsi= {
-		marker: new google.maps.Marker(google.maps.LatLng,"title"),
-		rating: 0,//foursquare rating
-		enabled: false
-	};
-}
-
-function detourClicked(location)
+/*function detourClicked(location)
 {
 	//called by eventlistener on markers, location is the marker
 	for(var i=0;i<availableDetours.length;i++)
@@ -136,7 +90,7 @@ function detourClicked(location)
 		}
 
 	}
-}
+}*/
 
 //gets our directions and returns an array of waypoints
 function getdirections()
@@ -161,38 +115,35 @@ function getdirections()
 			  {
 				  waypointStrs[i] = waypoints[i].lat().toString() + ',' + waypoints[i].lng().toString();
 			  }
-			  return waypointStrs;
+			  //console.log(waypointStrs);
+
+			  GPSCoords = waypointStrs;
+			  console.log("before for loop");
+			  for(var i =0; i <GPSCoords.length; i++)
+			  	getVenues(i);
+			  console.log("Reached the end of getdirections");
+
 			}
 			else
-				return null;
+				GPSCoords = null;
 		});
 }
 
-function getFourSquareLocations(waypoints)
-{
-	var locations = new Array();
-	
-	return locations;
-}
+//Function that makes the calls to the Foursquare API
 
-function test()
+function getVenues(i)
 {
-	var start = "Philadelphia, PA";
-	var end = "Chicago, IL";
-	var request = 
-	{
-		origin: start,
-		destination: end,
-		travelMode: google.maps.DirectionsTravelMode.DRIVING
-	};
-	directionsService.route(request, function(response,status) 
-		{
-			if (status == google.maps.DirectionsStatus.OK) 
-			{
-			  directionsDisplay.setDirections(response);
-			}	
-		});
-	
+	console.log("getVenues called");
+	var RADIUS = radius*METERS;
+	var URL = config.apiUrl + 'v2/venues/explore?ll=' + GPSCoords[i] + '&limit=5' + '&radius=' + RADIUS.toString() + '&client_id=' + config.apiKey + '&clientSecret=' + config.clientSecret;
+	//console.log(URL);
+	var LOCATIONS = $.getJSON(URL);
+	//console.log("This is LOCATIONS: " + LOCATIONS);
+	//console.log("This is LOCATIONS: " + LOCATIONS{});
+	//var names = response.groups.items.venue.name;
+	//console.log(names);
+	console.log("finished getVenues");
+
 }
 
 google.maps.event.addDomListener(window, 'load', init);
