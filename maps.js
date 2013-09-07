@@ -21,6 +21,8 @@ var ATTRACTIONVENUES = {
 	b: true,
 	id: '4bf58dd8d48988d12d941735'
 };
+var GASVENUES = true;
+
 
 
 //Configure key/url's
@@ -175,6 +177,8 @@ function getVenues(i)
 		CATEGORIES += ',' + NATUREVENUES.id;
 	else if(ATTRACTIONVENUES.b === true)
 		CATEGORIES += ',' + ATTRACTIONVENUES.id;
+	
+
 
 	var URL = config.apiUrl + 'v2/venues/explore?ll=' + GPSCoords[i] + '&limit=5' + '&radius=' + RADIUS.toString() + '&categoryid=' + CATEGORIES +  '&client_id=' +  config.apiKey + '&client_secret=' + config.clientSecret;
 	
