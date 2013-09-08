@@ -30,6 +30,8 @@ var isFourSquare = true;
 
 var VenueTotal;
 var VenueCount;
+var GASCount;
+var GASTotal;
 var detourCount;
 var time;
 
@@ -68,6 +70,8 @@ function init(){
 	VENUES = {};
 	VenueCount = 0;
 	VenueTotal = 0;
+	GASCount =0;
+	GASTotal=0;
 
 	var mapOptions = 
 	{
@@ -187,6 +191,8 @@ function getdirections()
 			  
 			  availableDetours = new Array();
 			  VenueTotal = GPSCoords.length;
+			  GASTotal = GPSCoords.length;
+			  GASCount = 0;
 			  VenueCount = 0;
 			  for(var i =0; i <GPSCoords.length; i++)
 			  	getVenues(i);
@@ -214,104 +220,131 @@ function getVenues(i)
 		CATEGORIES += ',' + NATUREVENUES.id;
 	else if(ATTRACTIONVENUES.b === true)
 		CATEGORIES += ',' + ATTRACTIONVENUES.id;
-		else if(GASVENUES === true)
-		{
-			var LATLNG = GPSCoords[i].split(',');
-			var LAT = LATLNG[0];
-			var LNG = LATLNG[1];
-			var gasurl = gasConfig.gasURL + '/stations' + '/radius' + '/' + LAT + '/' + LNG + '/' + defRadius.toString() + '/' + 'reg' + '/Price/' + gasConfig.gasKEY + '.json?'
+	else if(GASVENUES === true)
+	{
+		var LATLNG = GPSCoords[i].split(',');
+		var LAT = LATLNG[0];
+		var LNG = LATLNG[1];
+		var gasurl = gasConfig.gasURL + '/stations' + '/radius' + '/' + LAT + '/' + LNG + '/' + defRadius.toString() + '/' + 'reg' + '/Price/' + gasConfig.gasKEY + '.json?'
 
+
+		$.getJSON(gasurl, function(data)
+		{
+			GASCount++;
 			
-			$.getJSON(gasurl, function(data)
-			{
-			
-			
-			GAS[data.stations[4].id] = {latitude: data.stations[5].lat, longitude: data.stations[6].lng, price: data.stations[1].price};
-			
-					
-					
+			GAS[data.stations[4].id] = {name: data.stations[4].station,lat: data.stations[5].lat, lng: data.stations[6].lng, price: data.stations[1].price};
+			if(GASCount===GASTotal)
+				HandleVenueList('GAS');
+
+
 			
 		});	 
-			isFourSquare = false;	
-
-	 		 		
-	 		 	}
+		isFourSquare = false;	
 
 
-
-	 		 	if(isFourSquare === true)
-	 		 		var URL = config.apiUrl + 'v2/venues/explore?ll=' + GPSCoords[i] + '&limit=5' + '&radius=' + RADIUS.toString() + '&categoryId=' + CATEGORIES +  '&client_id=' +  config.apiKey + '&client_secret=' + config.clientSecret;
-	 		 	$.getJSON(URL, function(data){
-	 		 		VenueCount++;
-	 		 		VENUES[data.response.groups[0].items[0].venue.id] = {name: data.response.groups[0].items[0].venue.name, lat: data.response.groups[0].items[0].venue.location.lat, lng: data.response.groups[0].items[0].venue.location.lng}
-	 		 		if(VenueCount===VenueTotal)
-	 		 			HandleVenueList();
+	}
 
 
 
-	 		 	});
-	 		 }
-	 		 function HandleVenueList()
-	 		 {
-	 		 	var count = 0;
-	 		 	for(id in VENUES)
-	 		 	{
-	 		 		var markerOptions = { map: map, title: VENUES[id].name, clickable: true, position: new google.maps.LatLng(VENUES[id].lat,VENUES[id].lng)};
-	 		 		availableDetours[count] = _newGoogleMarker(markerOptions);
-	 		 		count++;
-	 		 	}
-	 		 }
+	if(isFourSquare === true)
+		var URL = config.apiUrl + 'v2/venues/explore?ll=' + GPSCoords[i] + '&limit=5' + '&radius=' + RADIUS.toString() + '&categoryId=' + CATEGORIES +  '&client_id=' +  config.apiKey + '&client_secret=' + config.clientSecret;
+	$.getJSON(URL, function(data){
+		VenueCount++;
+		VENUES[data.response.groups[0].items[0].venue.id] = {name: data.response.groups[0].items[0].venue.name, lat: data.response.groups[0].items[0].venue.location.lat, lng: data.response.groups[0].items[0].venue.location.lng}
+		if(VenueCount===VenueTotal)
+			HandleVenueList('MARKER');
 
-	 		 function _newGoogleMarker(param)
-	 		 {
-	 		 	var r = new google.maps.Marker(param);
-	 		 	r.enabled = false;
-	 		 	google.maps.event.addListener(r,'click',function()
-	 		 	{
-	 		 		if (r.enabled)
-	 		 		{
-	 		 			var _newDetour = new Array();
-	 		 			var count = 0;
-	 		 			for(var i=0;i<=detourCount;i++)
-	 		 			{
 
-	 		 				if(detours[i]!==r)
-	 		 				{
-	 		 					_newDetour[count] = detours[i];
-	 		 					count++;
-	 		 				}
-	 		 			}
-	 		 			r.enabled = false;
-	 		 			detours = _newDetour;
-	 		 			detourCount--;
 
-	 		 		}
-	 		 		else
-	 		 		{
-			//check we don't have more than 8
-			if(detourCount===8)
-				return; //TODO: some sort of warning window
-			r.enabled = true;
-			detours[detourCount] = r;
-			detourCount++;
-			
-		}
-		reRoute();
 	});
-	 		 	return r;
-	 		 }
+}
+function HandleVenueList(typeOFMarker)
+{
+	console.log("You have made it into the HandleVenueList method!");
+	var count = 0;
+	if(typeOFMarker === 'GAS')
+	{
+		for(id in GAS)
+		{
+			console.log("HandleVenueList GAS Called");
+			var markerOptions = { map: map, title: GAS[id].name, clickable: true, position: new google.maps.LatLng(GAS[id].lat,GAS[id].lng)};
+			availableDetours[count] = _newGoogleMarker(markerOptions);
+			count++;
+		}
+	}
+	else if(typeOFMarker === 'MARKER')
+	{
 
-	 		 function reRoute()
-	 		 {
-	 		 	var waypts = new Array();
-	 		 	for(var i=0;i<detours.length;i++)
-	 		 	{
+		for(id in VENUES)
+		{
+			console.log("HandleVenueList MARKER Called");
+			var markerOptions = { map: map, title: VENUES[id].name, clickable: true, position: new google.maps.LatLng(VENUES[id].lat,VENUES[id].lng)};
+			availableDetours[count] = _newGoogleMarker(markerOptions);
+			count++;
+		}
+	}
+}
 
-	 		 		waypts[i] = {location: detours[i].position, stopover: true};
-	 		 	}
-	 		 	var request = 
-	 		 	{
-	 		 		origin: start,
+function _newGoogleMarker(param)
+{
+	var r = new google.maps.Marker(param);
+	r.enabled = false;
+	google.maps.event.addListener(r,'click',function()
+	{
+		var infowindow = new google.maps.InfoWindow({content: "<h1>"+r.title+"<div class='add-stop'>Add Stop</div><div class='more-info></div>"});
+		infowindow.open(map,r);
+		var addStops = document.getElementsByClassName('add-stop');
+		for(var i=0; i<addStops.length;i++)
+		{
+			addStops[i].addEventListener('click',function() {
+				if (r.enabled)
+				{
+					var _newDetour = new Array();
+					var count = 0;
+					for(var i=0;i<=detourCount;i++)
+					{
+
+						if(detours[i]!==r)
+						{
+							_newDetour[count] = detours[i];
+							count++;
+						}
+					}
+					r.enabled = false;
+					detours = _newDetour;
+					detourCount--;
+
+				}
+				else
+				{
+				//check we don't have more than 8
+					if(detourCount===8)
+					return; //TODO: some sort of warning window
+					r.enabled = true;
+					detours[detourCount] = r;
+					detourCount++;
+				}
+reRoute();
+
+
+});
+		}
+	});
+
+	return r;
+}
+
+function reRoute()
+{
+	var waypts = new Array();
+	for(var i=0;i<detours.length;i++)
+	{
+
+		waypts[i] = {location: detours[i].position, stopover: true};
+	}
+	var request = 
+	{
+		origin: start,
 		waypoints : waypts, //detours are markers not way
 		optimizeWaypoints: true,
 		destination: end,
