@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Detour! App</title>
+	<link href='http://fonts.googleapis.com/css?family=Lato:400,400italic' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="stylesheets/style.css">
+    <script type="text/javascript"
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAyLJxhrTkAmRaTe8tUR2dA6ayI3fqMA14&sensor=true">
+    </script>
+
+     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+
+	<!-- mobile icons for iPhone 4 and 4s-->
+	<link rel="apple-touch-icon-precomposed" sizes="114x114" href="images/apple-touch-icon-114x114-precomposed.png">
+
+	<!-- startup screens iPhone (Retina) -->
+	<link href="images/launch-iphone4.jpg" media="(device-width: 320px) and (device-height: 480px) and (-webkit-device-pixel-ratio: 1)" rel="apple-touch-startup-image">
+
+</head>
+<body>
+	
+	<section class="header">
+			<div class="logo">
+			</div>
+			<div class="head-arrow">
+				▼
+			</div>
+	</section>
+	
+	<div class="container">
+	<section class="info">
+		
+		<input class="info-input" id="start-loc" type="text" name="start-location"  autofocus required placeholder="Start Location"></input>
+		<input class="info-input" id="end-loc" type="text" name="end-location" required placeholder="Final Destination"></input>
+		<p class="distance-sent"> Let's go up to <input class="dist-input" id="distance" type="number" name="distance" required value="20"></input> miles off course! </p>
+
+	</section>
+	<div class="menu-area">
+		<div class="menu-circle">
+			<p class="menu-text go">GO</p>
+		</div>
+			<ul class="menu">
+				<li class="sub">
+					<a class="unit restaurants" id="food-button" href="#"></a>
+				</li>
+				<li class="sub">
+					<a class="unit gas-stations" id="gas-button" href="#"></a>
+				</li>
+				<li class="sub">
+					<a class="unit sites" id="sites-button" href="#"></a>
+				</li>
+				<li class="sub">
+					<a class="unit nature" id="nature-button" href="#"></a>
+				</li>
+				<li class="sub">
+					<a class="unit music" id="music" href="#"></a>
+				</li>
+		 	</ul>
+		
+	</div>
+	<section id="directions">
+		<h1 class="directions-h1"> Driving Directions <span class="dir-arrow">▲</span> </h1>
+	</section>
+	</div>
+	<div id="map-canvas"></div>
+
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" ></script>
+	<script src="js/scripts.js"></script>	
+	<script src="js/maps.js"></script>
+	<script src="js/sc.js"></script>
+	
+
+</body>
+</html>
