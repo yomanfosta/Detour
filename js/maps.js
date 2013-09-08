@@ -235,7 +235,7 @@ function getVenues(i)
 	 	console.log(gasurl);	
 		$.getJSON(gasurl, function(data)
 		{
-			console.log(data.stations);
+			console.log(data.stations);	
 			console.log("JSON Acquired");
 		});	 	
 	 	 	

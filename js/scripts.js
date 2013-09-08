@@ -12,8 +12,9 @@ window.DETOUR || (DETOUR = {});
 		},
 
 		bindEvents: function() {
-			
 			$('#directions').on('click', this.pullDirections);
+			$('.icon').on('click', this.clickMenu);
+			$('.go').on('click', this.pressGo);
 		},
 
 		pullDirections: function(){
@@ -25,8 +26,25 @@ window.DETOUR || (DETOUR = {});
 			}
 			else {
 				$this.addClass('pulled');
+				$('.dir-arrow').innerHTML('hi');
 			}
-		}
+		},
+
+		clickMenu: function(e){
+			var $this = $('.menu');
+			if ($('.icon').is('.clicked')) {
+				$this.removeClass('clicked');
+			}
+			else {
+				$this.addClass('clicked');
+			}
+		},
+
+		pressGo: function() {
+			$('.info').css('visibility','hidden');
+			$('#directions').css('visibility','visible');
+
+			}
 	};
 
 	DETOUR.common.init(); //lol. note to self: remember to initialize
