@@ -73,25 +73,24 @@ body {
 }
 
 /* line 11, ../sass/_main.scss */
-.container {
+.container, .header {
   max-width: 800px;
   margin: 0 auto;
-  position: relative;
   z-index: 2;
 }
 
-/* line 18, ../sass/_main.scss */
+/* line 17, ../sass/_main.scss */
 section {
   width: 100%;
 }
 
-/* line 22, ../sass/_main.scss */
+/* line 21, ../sass/_main.scss */
 a {
   text-decoration: none;
   color: inherit;
 }
 
-/* line 27, ../sass/_main.scss */
+/* line 26, ../sass/_main.scss */
 #map-canvas {
   position: relative;
   margin-top: -350px;
@@ -102,19 +101,19 @@ a {
   -webkit-transform: translateZ(0);
 }
 @media (max-width: 768px) {
-  /* line 27, ../sass/_main.scss */
+  /* line 26, ../sass/_main.scss */
   #map-canvas {
     height: 150%;
   }
 }
 @media (max-width: 550px) {
-  /* line 27, ../sass/_main.scss */
+  /* line 26, ../sass/_main.scss */
   #map-canvas {
     height: 200%;
   }
 }
 
-/* line 46, ../sass/_main.scss */
+/* line 45, ../sass/_main.scss */
 .directions-h1 {
   text-align: center;
   padding: 0.8em 0;
@@ -122,14 +121,43 @@ a {
   cursor: pointer;
 }
 
-/* line 53, ../sass/_main.scss */
+/* line 52, ../sass/_main.scss */
 .adp, .adp table, .adp-list {
   margin: 0 auto !important;
 }
 
-/* line 57, ../sass/_main.scss */
+/* line 56, ../sass/_main.scss */
 html {
   height: 100%;
+}
+
+/* line 58, ../sass/_main.scss */
+.dest-title {
+  font-size: 1.5em;
+  margin-bottom: 10px;
+}
+/* line 61, ../sass/_main.scss */
+.dest-title h1 {
+  line-height: 2em;
+}
+
+/* line 66, ../sass/_main.scss */
+.add-stop {
+  padding: 0.5em 1em;
+  width: 60px;
+  margin-top: 10px;
+  background: #f7931e;
+  color: white;
+}
+
+/* line 74, ../sass/_main.scss */
+.the-link {
+  width: 40px;
+  height: 40px;
+  float: left;
+  margin: -20px 100px;
+  display: inline-block;
+  color: #61a3c1;
 }
 
 /* line 1, ../sass/_header.scss */
@@ -154,6 +182,7 @@ html {
   width: 100%;
   height: 50px;
   padding: 10px 0;
+  position: relative;
 }
 @media (max-width: 420px) {
   /* line 13, ../sass/_header.scss */
@@ -162,7 +191,7 @@ html {
   }
 }
 
-/* line 23, ../sass/_header.scss */
+/* line 25, ../sass/_header.scss */
 .head-arrow {
   color: #61a3c1;
   visibility: visible;
@@ -177,31 +206,33 @@ html {
 .info {
   background: rgba(255, 255, 255, 0.8);
   padding: 10px 0;
+  z-index: 1;
+  position: relative;
 }
 
-/* line 6, ../sass/_info.scss */
+/* line 8, ../sass/_info.scss */
 ::-webkit-input-placeholder {
   font-style: italic;
 }
 
-/* line 9, ../sass/_info.scss */
+/* line 11, ../sass/_info.scss */
 :-moz-placeholder {
   /* Firefox 18- */
   font-style: italic;
 }
 
-/* line 12, ../sass/_info.scss */
+/* line 14, ../sass/_info.scss */
 ::-moz-placeholder {
   /* Firefox 19+ */
   font-style: italic;
 }
 
-/* line 15, ../sass/_info.scss */
+/* line 17, ../sass/_info.scss */
 :-ms-input-placeholder {
   font-style: italic;
 }
 
-/* line 19, ../sass/_info.scss */
+/* line 21, ../sass/_info.scss */
 .info-input, .dist-input {
   background: white;
   border: 1px solid #f7931e;
@@ -214,12 +245,12 @@ html {
   margin: 2% 6%;
 }
 @media (max-width: 420px) {
-  /* line 19, ../sass/_info.scss */
+  /* line 21, ../sass/_info.scss */
   .info-input, .dist-input {
     padding: 0em 1em;
   }
 }
-/* line 32, ../sass/_info.scss */
+/* line 34, ../sass/_info.scss */
 .info-input:focus, .dist-input:focus {
   background: #ffecdc;
   border: 1px solid #ffa85a;
@@ -227,13 +258,19 @@ html {
   outline: none;
 }
 
-/* line 40, ../sass/_info.scss */
+/* line 42, ../sass/_info.scss */
 .dist-input {
   width: 10%;
   margin: 2%;
 }
+@media (max-width: 550px) {
+  /* line 42, ../sass/_info.scss */
+  .dist-input {
+    width: 14%;
+  }
+}
 
-/* line 46, ../sass/_info.scss */
+/* line 51, ../sass/_info.scss */
 .start-label, .end-label {
   color: #3d7899;
   display: inline-block;
@@ -245,31 +282,31 @@ html {
   margin-top: 14px;
 }
 
-/* line 57, ../sass/_info.scss */
+/* line 62, ../sass/_info.scss */
 .distance-sent {
   text-align: center;
   font-size: 36px;
 }
 @media (max-width: 768px) {
-  /* line 57, ../sass/_info.scss */
+  /* line 62, ../sass/_info.scss */
   .distance-sent {
     font-size: 30px;
   }
 }
 @media (max-width: 550px) {
-  /* line 57, ../sass/_info.scss */
+  /* line 62, ../sass/_info.scss */
   .distance-sent {
     font-size: 23px;
   }
 }
 @media (max-width: 420px) {
-  /* line 57, ../sass/_info.scss */
+  /* line 62, ../sass/_info.scss */
   .distance-sent {
     font-size: 18px;
   }
 }
 @media (max-width: 320px) {
-  /* line 57, ../sass/_info.scss */
+  /* line 62, ../sass/_info.scss */
   .distance-sent {
     font-size: 14px;
   }

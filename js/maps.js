@@ -9,6 +9,7 @@ var GPSCoords;
 var defRadius = 20;
 var METERS = 1609;
 var VENUES;
+var infowindow = new google.maps.InfoWindow;
 var NATUREVENUES = {
 	b: false,
 	id: '4d4b7105d754a06377d81259'
@@ -34,14 +35,14 @@ var GASCount;
 var GASTotal;
 var detourCount;
 var time;
-
+var lastopened;
 //Configure key/url's for FOURSQUARE API
 var config = {
 	apiKey: 'RT3RC2PZXYLJJKVRD0P1THAIWLTHBHSWB3ENEGD4QRWLJ1G3',
 	authUrl: 'https://foursquare.com/',
 	apiUrl: 'https://api.foursquare.com/',
 	clientSecret: 'ZZRKY01HN3YBFACKRUR1GSEBWZKKPKZOAXQR540PFRFG3PEV'
-
+	
 
 
 };	
@@ -58,7 +59,7 @@ function init(){
 	directionsDisplay = new google.maps.DirectionsRenderer();
 	start = '';
 	end = '';
-
+	lastopened = {};
 	detours = new Array();
 	VENUES = {};
 	GAS = {};
@@ -187,8 +188,8 @@ function getdirections()
 			  GPSCoords = waypointStrs;
 			  
 			  for(var i=0; i<availableDetours.length;i++)
-			  	availableDetours[i].setVisible(false);
-			  
+			  	availableDetours[i].setMap(null);
+			  availableDetours = [];
 			  availableDetours = new Array();
 			  VenueTotal = GPSCoords.length;
 			  GASTotal = GPSCoords.length;
@@ -250,7 +251,7 @@ function getVenues(i)
 		var URL = config.apiUrl + 'v2/venues/explore?ll=' + GPSCoords[i] + '&limit=5' + '&radius=' + RADIUS.toString() + '&categoryId=' + CATEGORIES +  '&client_id=' +  config.apiKey + '&client_secret=' + config.clientSecret;
 	$.getJSON(URL, function(data){
 		VenueCount++;
-		VENUES[data.response.groups[0].items[0].venue.id] = {name: data.response.groups[0].items[0].venue.name, lat: data.response.groups[0].items[0].venue.location.lat, lng: data.response.groups[0].items[0].venue.location.lng}
+		VENUES[data.response.groups[0].items[0].venue.id] = {name: data.response.groups[0].items[0].venue.name, lat: data.response.groups[0].items[0].venue.location.lat, lng: data.response.groups[0].items[0].venue.location.lng, link: data.response.groups[0].items[0].venue.canonicalUrl}
 		if(VenueCount===VenueTotal)
 			HandleVenueList('MARKER');
 
@@ -268,7 +269,7 @@ function HandleVenueList(typeOFMarker)
 		{
 			console.log("HandleVenueList GAS Called");
 			var markerOptions = { map: map, title: GAS[id].name, clickable: true, position: new google.maps.LatLng(GAS[id].lat,GAS[id].lng)};
-			availableDetours[count] = _newGoogleMarker(markerOptions);
+			availableDetours[count] = _newGoogleMarker(markerOptions,null, GAS[id].price);
 			count++;
 		}
 	}
@@ -279,20 +280,34 @@ function HandleVenueList(typeOFMarker)
 		{
 			console.log("HandleVenueList MARKER Called");
 			var markerOptions = { map: map, title: VENUES[id].name, clickable: true, position: new google.maps.LatLng(VENUES[id].lat,VENUES[id].lng)};
-			availableDetours[count] = _newGoogleMarker(markerOptions);
+			availableDetours[count] = _newGoogleMarker(markerOptions,VENUES[id].link,null);
 			count++;
 		}
 	}
 }
 
-function _newGoogleMarker(param)
+function _newGoogleMarker(param,link,price)
 {
 	var r = new google.maps.Marker(param);
 	r.enabled = false;
+	r.link = link;
+	r.price = price;
+	
+	
 	google.maps.event.addListener(r,'click',function()
 	{
-		var infowindow = new google.maps.InfoWindow({content: "<h1>"+r.title+"<div class='add-stop'>Add Stop</div><div class='more-info></div>"});
+		if(typeof lastopened === google.maps.Marker)
+			lastopened.close();
+			
+		var context = "<h1 class='dest-title'>"+r.title+"<div class='add-stop'>Add Stop</div>";
+		if(r.link!== null)
+			context= context+"<div class='link'><a class='the-link' href='"+r.link+"'target='_blank'>▼</a></div>";
+		if(r.price!== null && r.price!=="N/A")
+			context= context+"<div class='price'>Price: "+r.price+"</div>";
+		infowindow.close();
+		infowindow.setContent(context);
 		infowindow.open(map,r);
+		lastopened = infowindow;
 		var addStops = document.getElementsByClassName('add-stop');
 		for(var i=0; i<addStops.length;i++)
 		{

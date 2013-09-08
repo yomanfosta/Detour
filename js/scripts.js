@@ -15,7 +15,11 @@ window.DETOUR || (DETOUR = {});
 			$('#directions').on('click', this.pullDirections);
 			$('.icon').on('click', this.clickMenu);
 			$('.go').on('click', this.pressGo);
-			$('.header').on('click', (function(){($('.info').css('visibility','visible'))}));
+			$('.header').on('click', (function(){
+				$('.info').css('visibility','visible');
+				$('.info').css('z-index','1');
+			}));
+			$(document).on('click', this.headArrow)
 		},
 
 		pullDirections: function(){
@@ -45,6 +49,7 @@ window.DETOUR || (DETOUR = {});
 		pressGo: function() {
 			var $this = $('.go');
 			$('.info').css('visibility','hidden');
+			$('.info').css('z-index','0');
 			$('#directions').css('visibility','visible');
 			
 			if ($('.go').is('.open')) {
@@ -59,8 +64,8 @@ window.DETOUR || (DETOUR = {});
 
 		headArrow: function() {
 			if ($('.info').css('visibility') == 'hidden') {
-			$('.head-arrow').css('visibility', 'visible');
-			}
+				$('.head-arrow').css('visibility', 'visible');
+				}
 			else {
 				$('.head-arrow').css('visibility', 'hidden');
 			}
