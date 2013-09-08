@@ -170,6 +170,7 @@ html {
   display: block;
   right: 30px;
   top: 25px;
+  visibility: hidden;
 }
 
 /* line 1, ../sass/_info.scss */
@@ -363,14 +364,15 @@ html {
 .menu-area {
   position: absolute;
   z-index: 3;
+  margin: 40px;
 }
 
-/* line 100, ../sass/_menu.scss */
+/* line 101, ../sass/_menu.scss */
 .sub {
   z-index: 1;
 }
 
-/* line 104, ../sass/_menu.scss */
+/* line 105, ../sass/_menu.scss */
 .restaurants {
   background: url("../images/menu-icon-eat.svg") no-repeat scroll 50% center/70% auto white;
   margin: 60px 10px;
@@ -379,12 +381,12 @@ html {
   -o-transition-delay: 0.1s;
   transition-delay: 0.1s;
 }
-/* line 108, ../sass/_menu.scss */
+/* line 109, ../sass/_menu.scss */
 .restaurants.open {
   margin: 0 6px;
 }
 
-/* line 112, ../sass/_menu.scss */
+/* line 113, ../sass/_menu.scss */
 .gas-stations {
   background: url("../images/menu-icon-gas.svg") no-repeat scroll 56% center/40% auto white;
   margin: 60px 10px;
@@ -393,12 +395,12 @@ html {
   -o-transition-delay: 0.2s;
   transition-delay: 0.2s;
 }
-/* line 116, ../sass/_menu.scss */
+/* line 117, ../sass/_menu.scss */
 .gas-stations.open {
   margin: 0 55px;
 }
 
-/* line 120, ../sass/_menu.scss */
+/* line 121, ../sass/_menu.scss */
 .sites {
   background: url("../images/menu-icon-sites.svg") no-repeat scroll 45% center/70% auto white;
   margin: 60px 0;
@@ -407,12 +409,12 @@ html {
   -o-transition-delay: 0.3s;
   transition-delay: 0.3s;
 }
-/* line 124, ../sass/_menu.scss */
+/* line 125, ../sass/_menu.scss */
 .sites.open {
   margin: 36px 90px;
 }
 
-/* line 128, ../sass/_menu.scss */
+/* line 129, ../sass/_menu.scss */
 .nature {
   background: url("../images/menu-icon-nature.svg") no-repeat scroll 52% center/65% auto white;
   margin: 60px 0;
@@ -421,12 +423,12 @@ html {
   -o-transition-delay: 0.4s;
   transition-delay: 0.4s;
 }
-/* line 132, ../sass/_menu.scss */
+/* line 133, ../sass/_menu.scss */
 .nature.open {
   margin: 85px 97px;
 }
 
-/* line 136, ../sass/_menu.scss */
+/* line 137, ../sass/_menu.scss */
 .music {
   background: url("../images/menu-icon-soundcloud.svg") no-repeat scroll 52% center/75% auto white;
   margin: 60px 0;
@@ -435,7 +437,7 @@ html {
   -o-transition-delay: 0.5s;
   transition-delay: 0.5s;
 }
-/* line 140, ../sass/_menu.scss */
+/* line 141, ../sass/_menu.scss */
 .music.open {
   margin: 130px 70px;
 }

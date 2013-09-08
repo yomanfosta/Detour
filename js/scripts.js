@@ -45,7 +45,7 @@ window.DETOUR || (DETOUR = {});
 		pressGo: function() {
 			var $this = $('.go');
 			$('.info').css('visibility','hidden');
-			$('#directions, .head-arrow').css('visibility','visible');
+			$('#directions').css('visibility','visible');
 			
 			if ($('.go').is('.open')) {
 				$this.removeClass('open');
@@ -54,6 +54,15 @@ window.DETOUR || (DETOUR = {});
 			else {
 				$this.addClass('open');
 				$('.sub').children().addClass('open');
+			}
+		},
+
+		headArrow: function() {
+			if ($('.info').css('visibility') == 'hidden') {
+			$('.head-arrow').css('visibility', 'visible');
+			}
+			else {
+				$('.head-arrow').css('visibility', 'hidden');
 			}
 		}
 	};
