@@ -43,6 +43,7 @@ window.DETOUR || (DETOUR = {});
 		pressGo: function() {
 			$('.info').css('visibility','hidden');
 			$('#directions').css('visibility','visible');
+			$('.sub').children().addClass('open');
 
 			}
 	};
