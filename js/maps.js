@@ -22,7 +22,7 @@ var ATTRACTIONVENUES = {
 	id: '4deefb944765f83613cdba6e'
 };
 var GAS;
-var GASVENUES = true;
+var GASVENUES = false;
 
 
 
@@ -44,8 +44,8 @@ var config = {
 };	
 
 var gasConfig = {
-	gasKEY: 'rfej9napna',
-	gasURL: 'https://api.mygasfeed.com/'
+	gasKEY: 'tzdn0ydcok',
+	gasURL: 'http://api.mygasfeed.com'
 };
 
 
@@ -102,6 +102,14 @@ function init(){
     {
     	console.log("foodbutton clicked!");
     	FOODVENUES.b = true;
+    	startendChange();
+    });
+
+    var gasButton = document.getElementById('gas-button');
+    gasButton.addEventListener('click',function()
+    {
+    	console.log("gasButton clicked");
+    	GASVENUES = true;
     	startendChange();
     })
 
@@ -194,7 +202,14 @@ function getdirections()
 }
 
 //Function that makes the calls to the Foursquare API
-
+function stringSplitter(r)
+{
+	// console.log("This is GPSCoords[i]" + r);
+	
+	return LAT,LNG;
+	// console.log("This is LAT: " + LAT);
+	// console.log("This is LNG: " + LNG);
+}
 function getVenues(i)
 {
 
@@ -210,12 +225,24 @@ function getVenues(i)
 	//console.log(CATEGORIES);
 	//else if(ATTRACTIONVENUES.b !== true && NATUREVENUES.b !== true && FOODVENUES.b !== true)
 		//CATEGORIES = FOODVENUES.id + ',' + NATUREVENUES.id + ',' + ATTRACTIONVENUES.id;
-	// else if(GASVENUES === true)
-	// {
-	// 	$.getJSON(gasConfig.gasURL + '/stations' + )
-	// 		GAS[]
-	// }
+	else if(GASVENUES === true)
+	 {
+	 	var LATLNG = GPSCoords[i].split(',');
+		var LAT = LATLNG[0];
+		var LNG = LATLNG[1];
+	 	var gasurl = gasConfig.gasURL + '/stations' + '/radius' + '/' + LAT + '/' + LNG + '/' + defRadius.toString() + '/' + 'reg' + '/Price/' + gasConfig.gasKEY + '.json?'
+
+	 	console.log(gasurl);	
+		$.getJSON(gasurl, function(data)
+		{
+			console.log(data.stations);
+			console.log("JSON Acquired");
+		});	 	
+	 	 	
+	 		 		// GAS[]
+	 }
 	
+
 
 
 	var URL = config.apiUrl + 'v2/venues/explore?ll=' + GPSCoords[i] + '&limit=5' + '&radius=' + RADIUS.toString() + '&categoryId=' + CATEGORIES +  '&client_id=' +  config.apiKey + '&client_secret=' + config.clientSecret;
@@ -241,7 +268,7 @@ function getVenues(i)
 		//console.log(data.response.groups[0].items[0].venue.name);
 		// console.log(data.response.groups[0].items[0].venue.location.lat);
 
-		
+
 		FOODVENUES.b = false;
 		NATUREVENUES.b = false;
 		ATTRACTIONVENUES.b = false;
