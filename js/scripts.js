@@ -19,6 +19,7 @@ window.DETOUR || (DETOUR = {});
 				$('.info').css('visibility','visible');
 				$('.info').css('z-index','1');
 			}));
+			$(document).on('click', this.headArrow)
 		},
 
 		pullDirections: function(){
@@ -63,8 +64,8 @@ window.DETOUR || (DETOUR = {});
 
 		headArrow: function() {
 			if ($('.info').css('visibility') == 'hidden') {
-			$('.head-arrow').css('visibility', 'visible');
-			}
+				$('.head-arrow').css('visibility', 'visible');
+				}
 			else {
 				$('.head-arrow').css('visibility', 'hidden');
 			}
