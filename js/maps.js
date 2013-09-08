@@ -250,7 +250,7 @@ function getVenues(i)
 		var URL = config.apiUrl + 'v2/venues/explore?ll=' + GPSCoords[i] + '&limit=5' + '&radius=' + RADIUS.toString() + '&categoryId=' + CATEGORIES +  '&client_id=' +  config.apiKey + '&client_secret=' + config.clientSecret;
 	$.getJSON(URL, function(data){
 		VenueCount++;
-		VENUES[data.response.groups[0].items[0].venue.id] = {name: data.response.groups[0].items[0].venue.name, lat: data.response.groups[0].items[0].venue.location.lat, lng: data.response.groups[0].items[0].venue.location.lng}
+		VENUES[data.response.groups[0].items[0].venue.id] = {name: data.response.groups[0].items[0].venue.name, lat: data.response.groups[0].items[0].venue.location.lat, lng: data.response.groups[0].items[0].venue.location.lng, link: data.response.groups[0].items[0].venue.canonicalUrl}
 		if(VenueCount===VenueTotal)
 			HandleVenueList('MARKER');
 
@@ -268,7 +268,7 @@ function HandleVenueList(typeOFMarker)
 		{
 			console.log("HandleVenueList GAS Called");
 			var markerOptions = { map: map, title: GAS[id].name, clickable: true, position: new google.maps.LatLng(GAS[id].lat,GAS[id].lng)};
-			availableDetours[count] = _newGoogleMarker(markerOptions);
+			availableDetours[count] = _newGoogleMarker(markerOptions,null);
 			count++;
 		}
 	}
@@ -279,19 +279,23 @@ function HandleVenueList(typeOFMarker)
 		{
 			console.log("HandleVenueList MARKER Called");
 			var markerOptions = { map: map, title: VENUES[id].name, clickable: true, position: new google.maps.LatLng(VENUES[id].lat,VENUES[id].lng)};
-			availableDetours[count] = _newGoogleMarker(markerOptions);
+			availableDetours[count] = _newGoogleMarker(markerOptions,VENUES[id].link);
 			count++;
 		}
 	}
 }
 
-function _newGoogleMarker(param)
+function _newGoogleMarker(param,link)
 {
 	var r = new google.maps.Marker(param);
 	r.enabled = false;
+	r.link = link;
 	google.maps.event.addListener(r,'click',function()
 	{
-		var infowindow = new google.maps.InfoWindow({content: "<h1>"+r.title+"<div class='add-stop'>Add Stop</div><div class='more-info></div>"});
+		var context = "<h1>"+r.title+"<div class='add-stop'>Add Stop</div><div class='more-info></div>";
+		if(r.link!== null)
+			context= context+"<div class='link'><a href="+r.link+">"+r.link+"</a></div>";
+		var infowindow = new google.maps.InfoWindow({content: context});
 		infowindow.open(map,r);
 		var addStops = document.getElementsByClassName('add-stop');
 		for(var i=0; i<addStops.length;i++)
