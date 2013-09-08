@@ -263,8 +263,14 @@ html {
   width: 10%;
   margin: 2%;
 }
+@media (max-width: 550px) {
+  /* line 42, ../sass/_info.scss */
+  .dist-input {
+    width: 14%;
+  }
+}
 
-/* line 48, ../sass/_info.scss */
+/* line 51, ../sass/_info.scss */
 .start-label, .end-label {
   color: #3d7899;
   display: inline-block;
@@ -276,31 +282,31 @@ html {
   margin-top: 14px;
 }
 
-/* line 59, ../sass/_info.scss */
+/* line 62, ../sass/_info.scss */
 .distance-sent {
   text-align: center;
   font-size: 36px;
 }
 @media (max-width: 768px) {
-  /* line 59, ../sass/_info.scss */
+  /* line 62, ../sass/_info.scss */
   .distance-sent {
     font-size: 30px;
   }
 }
 @media (max-width: 550px) {
-  /* line 59, ../sass/_info.scss */
+  /* line 62, ../sass/_info.scss */
   .distance-sent {
     font-size: 23px;
   }
 }
 @media (max-width: 420px) {
-  /* line 59, ../sass/_info.scss */
+  /* line 62, ../sass/_info.scss */
   .distance-sent {
     font-size: 18px;
   }
 }
 @media (max-width: 320px) {
-  /* line 59, ../sass/_info.scss */
+  /* line 62, ../sass/_info.scss */
   .distance-sent {
     font-size: 14px;
   }
