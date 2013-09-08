@@ -295,7 +295,7 @@ function _newGoogleMarker(param,link,price)
 	{
 		var context = "<h1 class='dest-title'>"+r.title+"<div class='add-stop'>Add Stop</div>";
 		if(r.link!== null)
-			context= context+"<div class='link'><a class='the-link' href='"+r.link+"target='_blank'></a></div>";
+			context= context+"<div class='link'><a class='the-link' href='"+r.link+"target='_blank'>▼</a></div>";
 		if(r.price!== null)
 			context= context+"<div class='price'>Price:"+r.price+"</div>";
 		var infowindow = new google.maps.InfoWindow({content: context});
