@@ -57,8 +57,7 @@ function init(){
 	end = '';
 
 	detours = new Array();
-	VENUES = {};
-
+	availableGas = new Array();
 	time =0;
 	detourCount = 0;
 	detours = new Array();
@@ -146,8 +145,6 @@ function getdirections()
 	var request = 
 	{
 		origin: start,
-		//waypoints : detours,
-		//optimizeWaypoints: true,
 		destination: end,
 		travelMode: google.maps.DirectionsTravelMode.DRIVING
 	};
@@ -185,8 +182,11 @@ function getdirections()
 			  GPSCoords = waypointStrs;
 			  console.log("before for loop");
 			  for(var i=0; i<availableDetours.length;i++)
-				availableDetours[i].setVisible(false);
-			  
+			  {
+				  availableDetours[i].setMap(null);
+				  availableDetours[i].setVisible(false);
+				  availableDetours[i] = null;
+				}  
 			  availableDetours = new Array();
 			  VenueTotal = GPSCoords.length;
 			  VenueCount = 0;
@@ -283,6 +283,16 @@ function getVenues(i)
 	//console.log("finished getVenues");
 
 }
+
+function displayGasMarkers(data)
+{
+	var count = 0;
+	for(id in GAS)
+	{
+		var markerOptions = {map: map, title: "gas station", clickable: true, position : new google.maps.LatLng(id.latitude,id.longitude)};
+		availableDetours[count]= _newGoogleGasMarker("markerOptions", id.price);
+	}
+
 function HandleVenueList()
 {
 	var count = 0;
@@ -295,42 +305,102 @@ function HandleVenueList()
 	}
 }
 
+function _newGoogleGasMarker(param,price)
+{
+	var r = new google.maps.Marker(param);
+	r.enabled = false;
+	r.price = price;
+	google.maps.event.addListener(r,'click',function()
+	{
+		var infowindow = new google.maps.InfoWindow({content: "<h1>"+r.price+"<div class='add-stop'>Add Stop</div><div class='more-info></div>"});
+		infowindow.open(map,r);
+		var addStops = document.getElementsByClassName('add-stop');
+		for(var i=0; i<addStops.length;i++)
+		{
+			addStops[i].addEventListener('click',function() {
+				if (r.enabled)
+				{
+					var _newDetour = new Array();
+					var count = 0;
+					for(var i=0;i<=detourCount;i++)
+					{
+						
+						if(detours[i]!==r)
+						{
+							_newDetour[count] = detours[i];
+							count++;
+						}
+					}
+					r.enabled = false;
+					detours = _newDetour;
+					detourCount--;
+					
+				}
+				else
+				{
+					//check we don't have more than 8
+					if(detourCount===8)
+						return; //TODO: some sort of warning window
+					r.enabled = true;
+					detours[detourCount] = r;
+					detourCount++;
+					
+				}
+				reRoute();
+				
+				
+			});
+		}
+	});
+
+
 function _newGoogleMarker(param)
 {
 	var r = new google.maps.Marker(param);
 	r.enabled = false;
 	google.maps.event.addListener(r,'click',function()
 	{
-		if (r.enabled)
+		var infowindow = new google.maps.InfoWindow({content: "<h1>"+r.title+"<div class='add-stop'>Add Stop</div><div class='more-info></div>"});
+		infowindow.open(map,r);
+		var addStops = document.getElementsByClassName('add-stop');
+		for(var i=0; i<addStops.length;i++)
 		{
-			var _newDetour = new Array();
-			var count = 0;
-			for(var i=0;i<=detourCount;i++)
-			{
-				
-				if(detours[i]!==r)
+			addStops[i].addEventListener('click',function() {
+				if (r.enabled)
 				{
-					_newDetour[count] = detours[i];
-					count++;
+					var _newDetour = new Array();
+					var count = 0;
+					for(var i=0;i<=detourCount;i++)
+					{
+						
+						if(detours[i]!==r)
+						{
+							_newDetour[count] = detours[i];
+							count++;
+						}
+					}
+					r.enabled = false;
+					detours = _newDetour;
+					detourCount--;
+					
 				}
-			}
-			r.enabled = false;
-			detours = _newDetour;
-			detourCount--;
-			
+				else
+				{
+					//check we don't have more than 8
+					if(detourCount===8)
+						return; //TODO: some sort of warning window
+					r.enabled = true;
+					detours[detourCount] = r;
+					detourCount++;
+					
+				}
+				reRoute();
+				
+				
+			});
 		}
-		else
-		{
-			//check we don't have more than 8
-			if(detourCount===8)
-				return; //TODO: some sort of warning window
-			r.enabled = true;
-			detours[detourCount] = r;
-			detourCount++;
-			
-		}
-		reRoute();
 	});
+	
 	return r;
 }
 
@@ -373,3 +443,5 @@ function getTravelTime()
 	return di
 }
 google.maps.event.addDomListener(window, 'load', init);
+
+
