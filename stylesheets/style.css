@@ -131,6 +131,35 @@ html {
   height: 100%;
 }
 
+/* line 58, ../sass/_main.scss */
+.dest-title {
+  font-size: 1.5em;
+  margin-bottom: 10px;
+}
+/* line 61, ../sass/_main.scss */
+.dest-title h1 {
+  line-height: 2em;
+}
+
+/* line 66, ../sass/_main.scss */
+.add-stop {
+  padding: 0.5em 1em;
+  width: 60px;
+  margin-top: 10px;
+  background: #f7931e;
+  color: white;
+}
+
+/* line 74, ../sass/_main.scss */
+.the-link {
+  width: 40px;
+  height: 40px;
+  float: left;
+  margin: -20px 100px;
+  display: inline-block;
+  color: #61a3c1;
+}
+
 /* line 1, ../sass/_header.scss */
 .logo {
   background: url("../images/logo.svg") no-repeat;
