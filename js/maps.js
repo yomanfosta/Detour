@@ -187,8 +187,8 @@ function getdirections()
 			  GPSCoords = waypointStrs;
 			  
 			  for(var i=0; i<availableDetours.length;i++)
-			  	availableDetours[i].setVisible(false);
-			  
+			  	availableDetours[i].setMap(null);
+			  availableDetours = [];
 			  availableDetours = new Array();
 			  VenueTotal = GPSCoords.length;
 			  GASTotal = GPSCoords.length;
@@ -294,7 +294,7 @@ function _newGoogleMarker(param,link)
 	{
 		var context = "<h1>"+r.title+"<div class='add-stop'>Add Stop</div><div class='more-info></div>";
 		if(r.link!== null)
-			context= context+"<div class='link'><a href="+r.link+">"+r.link+"</a></div>";
+			context= context+"<div class='link'><a href='"+r.link+"' target='_blank'>"+r.link+"</a></div>";
 		var infowindow = new google.maps.InfoWindow({content: context});
 		infowindow.open(map,r);
 		var addStops = document.getElementsByClassName('add-stop');
