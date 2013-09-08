@@ -268,7 +268,7 @@ function HandleVenueList(typeOFMarker)
 		{
 			console.log("HandleVenueList GAS Called");
 			var markerOptions = { map: map, title: GAS[id].name, clickable: true, position: new google.maps.LatLng(GAS[id].lat,GAS[id].lng)};
-			availableDetours[count] = _newGoogleMarker(markerOptions,null);
+			availableDetours[count] = _newGoogleMarker(markerOptions,null, GAS[id].price);
 			count++;
 		}
 	}
@@ -279,22 +279,25 @@ function HandleVenueList(typeOFMarker)
 		{
 			console.log("HandleVenueList MARKER Called");
 			var markerOptions = { map: map, title: VENUES[id].name, clickable: true, position: new google.maps.LatLng(VENUES[id].lat,VENUES[id].lng)};
-			availableDetours[count] = _newGoogleMarker(markerOptions,VENUES[id].link);
+			availableDetours[count] = _newGoogleMarker(markerOptions,VENUES[id].link,null);
 			count++;
 		}
 	}
 }
 
-function _newGoogleMarker(param,link)
+function _newGoogleMarker(param,link,price)
 {
 	var r = new google.maps.Marker(param);
 	r.enabled = false;
 	r.link = link;
+	r.price = price;
 	google.maps.event.addListener(r,'click',function()
 	{
 		var context = "<h1>"+r.title+"<div class='add-stop'>Add Stop</div><div class='more-info></div>";
 		if(r.link!== null)
 			context= context+"<div class='link'><a href='"+r.link+"' target='_blank'>"+r.link+"</a></div>";
+		if(r.price!== null)
+			context= context+"<div class='price'>Price:"+r.price+"</div>";
 		var infowindow = new google.maps.InfoWindow({content: context});
 		infowindow.open(map,r);
 		var addStops = document.getElementsByClassName('add-stop');
