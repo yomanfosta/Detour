@@ -9,7 +9,6 @@ var GPSCoords;
 var defRadius = 20;
 var METERS = 1609;
 var VENUES;
-<<<<<<< HEAD
 var NATUREVENUES = {
 	b: true,
 	id: '4d4b7105d754a06377d81259'
@@ -22,31 +21,35 @@ var ATTRACTIONVENUES = {
 	b: true,
 	id: '4bf58dd8d48988d12d941735'
 };
+var GAS;
 var GASVENUES = true;
 
 
 
-=======
+
 var VenueTotal;
 var VenueCount;
 var detourCount;
 var time;
->>>>>>> 9c13996efddbb24e596561bc92ff5c4552303ca9
-//Configure key/url's
+
+//Configure key/url's for FOURSQUARE API
 var config = {
 	apiKey: 'RT3RC2PZXYLJJKVRD0P1THAIWLTHBHSWB3ENEGD4QRWLJ1G3',
 	authUrl: 'https://foursquare.com/',
 	apiUrl: 'https://api.foursquare.com/',
 	clientSecret: 'ZZRKY01HN3YBFACKRUR1GSEBWZKKPKZOAXQR540PFRFG3PEV'
 
-<<<<<<< HEAD
+
 
 };	
 
-=======
+var gasConfig = {
+	gasKEY: 'rfej9napna',
+	gasURL: 'https://api.mygasfeed.com/'
+}
 
 };	
->>>>>>> 9c13996efddbb24e596561bc92ff5c4552303ca9
+
 
 
 function init(){
@@ -54,10 +57,10 @@ function init(){
 	directionsDisplay = new google.maps.DirectionsRenderer();
 	start = '';
 	end = '';
-<<<<<<< HEAD
+
 	detours = new Array();
 	VENUES = {};
-=======
+
 	time =0;
 	detourCount = 0;
 	detours = new Array();
@@ -65,7 +68,7 @@ function init(){
 	VENUES = {};
 	VenueCount = 0;
 	VenueTotal = 0;
->>>>>>> 9c13996efddbb24e596561bc92ff5c4552303ca9
+
 	var mapOptions = 
 	{
 		zoom: 8,
@@ -120,10 +123,10 @@ function getdirections()
 		if (status == google.maps.DirectionsStatus.OK) 
 		{
 			directionsDisplay.setDirections(response);
-<<<<<<< HEAD
-=======
+
+
 			directionsDisplay.setPanel(document.getElementById("directions"));
->>>>>>> 9c13996efddbb24e596561bc92ff5c4552303ca9
+
 			  //LatLngs
 			  var counter = 0;
 			  var waypoints = response.routes[0].overview_path;
@@ -169,7 +172,7 @@ function getdirections()
 
 function getVenues(i)
 {
-<<<<<<< HEAD
+
 
 	var RADIUS = defRadius*METERS;
 	var CATEGORIES = '';
@@ -179,6 +182,11 @@ function getVenues(i)
 		CATEGORIES += ',' + NATUREVENUES.id;
 	else if(ATTRACTIONVENUES.b === true)
 		CATEGORIES += ',' + ATTRACTIONVENUES.id;
+	// else if(GASVENUES === true)
+	// {
+	// 	$.getJSON(gasConfig.gasURL + '/stations' + '/' + RADIUS.toString() + )
+	// 		GAS[]
+	// }
 	
 
 
@@ -191,8 +199,6 @@ function getVenues(i)
 
 
 
-=======
-	
 	var RADIUS = radius*METERS;
 	var URL = config.apiUrl + 'v2/venues/explore?ll=' + GPSCoords[i] + '&limit=5' + '&radius=' + RADIUS.toString() + '&client_id=' + config.apiKey + '&client_secret=' + config.clientSecret;
 	//console.log(URL);
@@ -207,7 +213,7 @@ function getVenues(i)
 	});
 
 
->>>>>>> 9c13996efddbb24e596561bc92ff5c4552303ca9
+
 	// console.log("This is LOCATIONS: " + LOCATIONS);
 	//console.log("This is LOCATIONS: " + LOCATIONS{});
 	// var names = response.groups.items.venue.name;

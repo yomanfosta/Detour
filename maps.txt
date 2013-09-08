@@ -10,20 +10,19 @@ var defRadius = 20;
 var METERS = 1609;
 var VENUES;
 var NATUREVENUES = {
-	b: false,
+	b: true,
 	id: '4d4b7105d754a06377d81259'
 };
 var FOODVENUES = {
-	b: false,
+	b: true,
 	id: '4d4b7105d754a06374d81259'
 };
 var ATTRACTIONVENUES = {
-	b: false,
-	id: '4deefb944765f83613cdba6e'
+	b: true,
+	id: '4bf58dd8d48988d12d941735'
 };
 var GAS;
-var GASVENUES = false;
-var isFourSquare = true;
+var GASVENUES = true;
 
 
 
@@ -45,9 +44,11 @@ var config = {
 };	
 
 var gasConfig = {
-	gasKEY: 'tzdn0ydcok',
-	gasURL: 'http://api.mygasfeed.com'
-};
+	gasKEY: 'rfej9napna',
+	gasURL: 'https://api.mygasfeed.com/'
+}
+
+};	
 
 
 
@@ -59,7 +60,6 @@ function init(){
 
 	detours = new Array();
 	VENUES = {};
-	GAS = {};
 
 	time =0;
 	detourCount = 0;
@@ -82,40 +82,6 @@ function init(){
     var startElement = document.getElementById("start-loc");
     var endElement = document.getElementById("end-loc");
     var radius = document.getElementById("distance");
-
-    var attractionButton = document.getElementById('sites-button');
-    attractionButton.addEventListener('click', function()
-    {
-    	console.log("attractionButton clicked!");
-    	ATTRACTIONVENUES.b = true;
-    	startendChange();
-    });
-
-    var natureButton = document.getElementById('nature-button');
-    natureButton.addEventListener('click', function()
-    {
-    	NATUREVENUES.b = true;
-    	startendChange();
-    });
-
-    var foodButton = document.getElementById('food-button');
-    foodButton.addEventListener('click', function()
-    {
-    	
-    	FOODVENUES.b = true;
-    	startendChange();
-    });
-
-    var gasButton = document.getElementById('gas-button');
-    gasButton.addEventListener('click',function()
-    {
-    	
-    	GASVENUES = true;
-    	startendChange();
-    })
-
-
-
     
     startElement.addEventListener('blur',startendChange);
     endElement.addEventListener('blur',startendChange);
@@ -128,10 +94,11 @@ function init(){
 //start and end have changed, reset everything!
 function startendChange()
 {
+	
 	start = document.getElementById("start-loc").value;
 	end = document.getElementById("end-loc").value;
 	defRadius = document.getElementById("distance").value;
-	if(start === '' || end === '')
+		if(start === '' || end === '')
 		return;
 	detourCount = 0;
 	detours = new Array();
@@ -180,20 +147,20 @@ function getdirections()
 			  		counter++;
 			  	}
 			  }
+			  //console.log(waypointStrs);
+
 			  GPSCoords = waypointStrs;
-			  
+			  console.log("before for loop");
 			  for(var i=0; i<availableDetours.length;i++)
-			  	availableDetours[i].setVisible(false);
+				availableDetours[i].setVisible(false);
 			  
 			  availableDetours = new Array();
 			  VenueTotal = GPSCoords.length;
 			  VenueCount = 0;
 			  for(var i =0; i <GPSCoords.length; i++)
 			  	getVenues(i);
-			  VENUES = {};
-			  FOODVENUES.b = false;
-			  NATUREVENUES.b = false;
-			  ATTRACTIONVENUES.b = false;
+			  //console.log("Reached the end of getdirections");
+			  console.log("getVenues called");
 
 			}
 			else
@@ -202,6 +169,7 @@ function getdirections()
 }
 
 //Function that makes the calls to the Foursquare API
+
 function getVenues(i)
 {
 
@@ -214,80 +182,83 @@ function getVenues(i)
 		CATEGORIES += ',' + NATUREVENUES.id;
 	else if(ATTRACTIONVENUES.b === true)
 		CATEGORIES += ',' + ATTRACTIONVENUES.id;
-		else if(GASVENUES === true)
+	else if(GASVENUES === true)
+	{
+		$.getJSON(gasConfig.gasURL + '/stations' + )
+			GAS[]
+	}
+	
+
+
+	var URL = config.apiUrl + 'v2/venues/explore?ll=' + GPSCoords[i] + '&limit=5' + '&radius=' + RADIUS.toString() + '&categoryid=' + CATEGORIES +  '&client_id=' +  config.apiKey + '&client_secret=' + config.clientSecret;
+	
+	$.getJSON(URL, function(data){
+		VENUES[data.response.groups[0].items[0].venue.id] = {name: data.response.groups[0].items[0].venue.name, lat: data.response.groups[0].items[0].venue.location.lat, lng: data.response.groups[0].items[0].venue.location.lng};
+
+	});
+
+
+
+	var RADIUS = radius*METERS;
+	var URL = config.apiUrl + 'v2/venues/explore?ll=' + GPSCoords[i] + '&limit=5' + '&radius=' + RADIUS.toString() + '&client_id=' + config.apiKey + '&client_secret=' + config.clientSecret;
+	//console.log(URL);
+	$.getJSON(URL, function(data){
+		VenueCount++;
+		VENUES[data.response.groups[0].items[0].venue.id] = {name: data.response.groups[0].items[0].venue.name, lat: data.response.groups[0].items[0].venue.location.lat, lng: data.response.groups[0].items[0].venue.location.lng}
+		//console.log(VENUES);
+		if(VenueCount===VenueTotal)
+			HandleVenueList();
+		// console.log(data.response.groups[0].items[0].venue.name);
+		// console.log(data.response.groups[0].items[0].venue.location.lat);
+	});
+
+
+
+	// console.log("This is LOCATIONS: " + LOCATIONS);
+	//console.log("This is LOCATIONS: " + LOCATIONS{});
+	// var names = response.groups.items.venue.name;
+	//console.log(names);
+	//console.log("finished getVenues");
+
+}
+function HandleVenueList()
+{
+	var count = 0;
+	for(id in VENUES)
+	{
+		console.log(id);
+		var markerOptions = { map: map, title: VENUES[id].name, clickable: true, position: new google.maps.LatLng(VENUES[id].lat,VENUES[id].lng)};
+		availableDetours[count] = _newGoogleMarker(markerOptions);
+		count++;
+	}
+}
+
+function _newGoogleMarker(param)
+{
+	var r = new google.maps.Marker(param);
+	r.enabled = false;
+	google.maps.event.addListener(r,'click',function()
+	{
+		if (r.enabled)
 		{
-			var LATLNG = GPSCoords[i].split(',');
-			var LAT = LATLNG[0];
-			var LNG = LATLNG[1];
-			var gasurl = gasConfig.gasURL + '/stations' + '/radius' + '/' + LAT + '/' + LNG + '/' + defRadius.toString() + '/' + 'reg' + '/Price/' + gasConfig.gasKEY + '.json?'
-
-			
-			$.getJSON(gasurl, function(data)
+			var _newDetour = new Array();
+			var count = 0;
+			for(var i=0;i<=detourCount;i++)
 			{
+				
+				if(detours[i]!==r)
+				{
+					_newDetour[count] = detours[i];
+					count++;
+				}
+			}
+			r.enabled = false;
+			detours = _newDetour;
+			detourCount--;
 			
-			
-			GAS[data.stations[4].id] = {latitude: data.stations[5].lat, longitude: data.stations[6].lng, price: data.stations[1].price};
-			
-					
-					
-			
-		});	 
-			isFourSquare = false;	
-
-	 		 		
-	 		 	}
-
-
-
-	 		 	if(isFourSquare === true)
-	 		 		var URL = config.apiUrl + 'v2/venues/explore?ll=' + GPSCoords[i] + '&limit=5' + '&radius=' + RADIUS.toString() + '&categoryId=' + CATEGORIES +  '&client_id=' +  config.apiKey + '&client_secret=' + config.clientSecret;
-	 		 	$.getJSON(URL, function(data){
-	 		 		VenueCount++;
-	 		 		VENUES[data.response.groups[0].items[0].venue.id] = {name: data.response.groups[0].items[0].venue.name, lat: data.response.groups[0].items[0].venue.location.lat, lng: data.response.groups[0].items[0].venue.location.lng}
-	 		 		if(VenueCount===VenueTotal)
-	 		 			HandleVenueList();
-
-
-
-	 		 	});
-	 		 }
-	 		 function HandleVenueList()
-	 		 {
-	 		 	var count = 0;
-	 		 	for(id in VENUES)
-	 		 	{
-	 		 		var markerOptions = { map: map, title: VENUES[id].name, clickable: true, position: new google.maps.LatLng(VENUES[id].lat,VENUES[id].lng)};
-	 		 		availableDetours[count] = _newGoogleMarker(markerOptions);
-	 		 		count++;
-	 		 	}
-	 		 }
-
-	 		 function _newGoogleMarker(param)
-	 		 {
-	 		 	var r = new google.maps.Marker(param);
-	 		 	r.enabled = false;
-	 		 	google.maps.event.addListener(r,'click',function()
-	 		 	{
-	 		 		if (r.enabled)
-	 		 		{
-	 		 			var _newDetour = new Array();
-	 		 			var count = 0;
-	 		 			for(var i=0;i<=detourCount;i++)
-	 		 			{
-
-	 		 				if(detours[i]!==r)
-	 		 				{
-	 		 					_newDetour[count] = detours[i];
-	 		 					count++;
-	 		 				}
-	 		 			}
-	 		 			r.enabled = false;
-	 		 			detours = _newDetour;
-	 		 			detourCount--;
-
-	 		 		}
-	 		 		else
-	 		 		{
+		}
+		else
+		{
 			//check we don't have more than 8
 			if(detourCount===8)
 				return; //TODO: some sort of warning window
@@ -298,20 +269,21 @@ function getVenues(i)
 		}
 		reRoute();
 	});
-	 		 	return r;
-	 		 }
+	return r;
+}
 
-	 		 function reRoute()
-	 		 {
-	 		 	var waypts = new Array();
-	 		 	for(var i=0;i<detours.length;i++)
-	 		 	{
-
-	 		 		waypts[i] = {location: detours[i].position, stopover: true};
-	 		 	}
-	 		 	var request = 
-	 		 	{
-	 		 		origin: start,
+function reRoute()
+{
+	console.log("reroute");
+	var waypts = new Array();
+	for(var i=0;i<detours.length;i++)
+	{
+		
+		waypts[i] = {location: detours[i].position, stopover: true};
+	}
+	var request = 
+	{
+		origin: start,
 		waypoints : waypts, //detours are markers not way
 		optimizeWaypoints: true,
 		destination: end,
