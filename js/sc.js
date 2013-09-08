@@ -1,4 +1,5 @@
-
+function initSC ()
+{
 var DURATION;
 console.log("sc.js opened");
 //Initialize the SoundCloud app
@@ -9,13 +10,12 @@ SC.initialize({
 
 console.log("client initialized");
 
-// SC.get('/plau', { duration: { from: DURATION-200000, to: DURATION+200000 }}, function(tracks) {
-
-// });
 
 //Embed the SoundCloud Widget into the app
-SC.oEmbed('url=http://soundcloud.com/madeon/technicolor-original', { auto_play: true }, document.getElementbyId("Widget"));
-});
+var track_url = 'https://soundcloud.com/madeon/technicolor-original';
+SC.oEmbed(track_url, { auto_play: true }, document.getElementById('sc-widget'));
+
+
 
 
 //Play the selected song/playlist
@@ -23,4 +23,7 @@ SC.oEmbed('url=http://soundcloud.com/madeon/technicolor-original', { auto_play: 
   // sound.play();
 // });
 
+}
 
+var musicButton = document.getElementById('music');
+musicButton.addEventListener('click', initSC);

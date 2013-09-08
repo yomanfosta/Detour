@@ -337,7 +337,7 @@ reRoute();
 function reRoute()
 {
 	var waypts = new Array();
-	for(var i=0;i<detours.length;i++)
+	for(var i=0;i<detours.length;i++) 
 	{
 
 		waypts[i] = {location: detours[i].position, stopover: true};
