@@ -9,6 +9,7 @@ var GPSCoords;
 var defRadius = 20;
 var METERS = 1609;
 var VENUES;
+var infowindow = new google.maps.InfoWindow;
 var NATUREVENUES = {
 	b: false,
 	id: '4d4b7105d754a06377d81259'
@@ -34,14 +35,14 @@ var GASCount;
 var GASTotal;
 var detourCount;
 var time;
-
+var lastopened;
 //Configure key/url's for FOURSQUARE API
 var config = {
 	apiKey: 'RT3RC2PZXYLJJKVRD0P1THAIWLTHBHSWB3ENEGD4QRWLJ1G3',
 	authUrl: 'https://foursquare.com/',
 	apiUrl: 'https://api.foursquare.com/',
 	clientSecret: 'ZZRKY01HN3YBFACKRUR1GSEBWZKKPKZOAXQR540PFRFG3PEV'
-
+	
 
 
 };	
@@ -58,7 +59,7 @@ function init(){
 	directionsDisplay = new google.maps.DirectionsRenderer();
 	start = '';
 	end = '';
-
+	lastopened = {};
 	detours = new Array();
 	VENUES = {};
 	GAS = {};
@@ -291,15 +292,22 @@ function _newGoogleMarker(param,link,price)
 	r.enabled = false;
 	r.link = link;
 	r.price = price;
+	
+	
 	google.maps.event.addListener(r,'click',function()
 	{
+		if(typeof lastopened === google.maps.Marker)
+			lastopened.close();
+			
 		var context = "<h1 class='dest-title'>"+r.title+"<div class='add-stop'>Add Stop</div>";
 		if(r.link!== null)
 			context= context+"<div class='link'><a class='the-link' href='"+r.link+"'target='_blank'>▼</a></div>";
-		if(r.price!== null)
+		if(r.price!== null && r.price!=="N/A")
 			context= context+"<div class='price'>Price: "+r.price+"</div>";
-		var infowindow = new google.maps.InfoWindow({content: context});
+		infowindow.close();
+		infowindow.setContent(context);
 		infowindow.open(map,r);
+		lastopened = infowindow;
 		var addStops = document.getElementsByClassName('add-stop');
 		for(var i=0; i<addStops.length;i++)
 		{
