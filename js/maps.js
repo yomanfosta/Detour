@@ -3,9 +3,9 @@ var directionsService = new google.maps.DirectionsService();
 var map; //initialized in init so we can get mapOptions
 var start ='';
 var end ='';
-var detours = new Array(); //the detours we have selected
-var availableDetours = new Array(); //available ones we haven't selected
-var GPSCoords;
+var detours = []; //the detours we have selected
+var availableDetours = []; //available ones we haven't selected
+var GPSCoords = []; //contains all the GPS coordinates of the original path
 var defRadius = 20;
 var METERS = 1609;
 var VENUES = {};
@@ -92,9 +92,6 @@ function init(){
     	startendChange();
     })
 
-
-
-    //these are obsolute
     startElement.addEventListener('blur',startendChange);
     endElement.addEventListener('blur',startendChange);
     radius.addEventListener('blur', startendChange);
@@ -102,8 +99,7 @@ function init(){
 }
 
 
-//start and end have changed, reset everything!
-//start and end have changed, reset everything!
+//originally meant to be used every time a new origin and destination were entered... Now its been warped into being something that is alled whenever there is a change in state, like when we want to get different types of venues to visit when buttons are clicked... probably doing things we don't need to do repetitively... could probably be broken down into 2 separate functions
 function startendChange()
 {
 	start = document.getElementById("start-loc").value;
@@ -111,38 +107,46 @@ function startendChange()
 	defRadius = document.getElementById("distance").value;
 	if(start === '' || end === '')
 		return;
+
+	//when locations are changed we should clear both detours and availableDetours
+
 	detourCount = 0;
-	detours = new Array();
+	detours = []; 
+	availableDetours = [];
 	console.log("Before getdirections");
 	getdirections(); //should be an array of strings
 
 	
 }
+
+//meant to get original set of directions
 //gets our directions and returns an array of waypoints
 function getdirections()
 {
+	GPSCoords = [];
 	var request = 
 	{
 		origin: start,
 		//waypoints : detours,
 		//optimizeWaypoints: true,
 		destination: end,
-		travelMode: google.maps.DirectionsTravelMode.DRIVING
+		travelMode: google.maps.DirectionsTravelMode.DRIVING //we assume we're driving, it's a roadtrip app!
 	};
 	directionsService.route(request, function(response,status) 
 	{
 		if (status == google.maps.DirectionsStatus.OK) 
 		{
-			directionsDisplay.setDirections(response);
+			//display our directions
+			directionsDisplay.setDirections(response); 
 
-
+			//put text directions in panel
 			directionsDisplay.setPanel(document.getElementById("directions"));
 
 			  //LatLngs
 			  var counter = 0;
 			  var waypoints = response.routes[0].overview_path;
 			  time = response.routes[0].legs[0].duration.value;
-			  var waypointStrs = new Array();
+			  var waypointStrs = [];
 			  for(var i=0; i<waypoints.length;i++)
 			  {
 			  	if(i%5 === 0)
@@ -158,12 +162,16 @@ function getdirections()
 			  		counter++;
 			  	}
 			  }
+
+
 			  GPSCoords = waypointStrs;
-			  
+			  //BOOM! this should be all getDirections does... everything below this should be else where are called by startchange() and reroute possibly
+
+
 			  for(var i=0; i<availableDetours.length;i++)
 			  	availableDetours[i].setMap(null);
 			  availableDetours = [];
-			  availableDetours = new Array();
+			  availableDetours = [];
 			  VenueTotal = GPSCoords.length;
 			  GASTotal = GPSCoords.length;
 			  GASCount = 0;
@@ -287,7 +295,7 @@ function _newGoogleMarker(param,link,price)
 			addStops[i].addEventListener('click',function() {
 				if (r.enabled)
 				{
-					var _newDetour = new Array();
+					var _newDetour = [];
 					var count = 0;
 					for(var i=0;i<=detourCount;i++)
 					{
@@ -324,7 +332,7 @@ reRoute();
 
 function reRoute()
 {
-	var waypts = new Array();
+	var waypts = [];
 	for(var i=0;i<detours.length;i++) 
 	{
 
