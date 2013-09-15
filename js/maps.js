@@ -1,14 +1,14 @@
-var directionsDisplay;
+var directionsDisplay = new google.maps.DirectionsRenderer();
 var directionsService = new google.maps.DirectionsService();
-var map;
-var start;
-var end;
-var detours; //the detours we have selected
-var availableDetours; //available ones we haven't selected
+var map; //initialized in init so we can get mapOptions
+var start ='';
+var end ='';
+var detours = new Array(); //the detours we have selected
+var availableDetours = new Array(); //available ones we haven't selected
 var GPSCoords;
 var defRadius = 20;
 var METERS = 1609;
-var VENUES;
+var VENUES = {};
 var infowindow = new google.maps.InfoWindow;
 var NATUREVENUES = {
 	b: false,
@@ -22,62 +22,35 @@ var ATTRACTIONVENUES = {
 	b: false,
 	id: '4deefb944765f83613cdba6e'
 };
-var GAS;
+var GAS = {};
 var GASVENUES = false;
 var isFourSquare = true;
-
-
-
-
-var VenueTotal;
-var VenueCount;
-var GASCount;
-var GASTotal;
-var detourCount;
-var time;
-var lastopened;
+var VenueTotal =0;
+var VenueCount = 0;
+var GASCount = 0;
+var GASTotal = 0;
+var detourCount =0;
+var time = 0;
+var lastopened = {}; //no clue what this is for
 //Configure key/url's for FOURSQUARE API
-var config = {
+var FSconfig = {
 	apiKey: 'RT3RC2PZXYLJJKVRD0P1THAIWLTHBHSWB3ENEGD4QRWLJ1G3',
 	authUrl: 'https://foursquare.com/',
 	apiUrl: 'https://api.foursquare.com/',
 	clientSecret: 'ZZRKY01HN3YBFACKRUR1GSEBWZKKPKZOAXQR540PFRFG3PEV'
-	
-
-
 };	
-
 var gasConfig = {
 	gasKEY: 'tzdn0ydcok',
 	gasURL: 'http://api.mygasfeed.com'
 };
 
-
-
 function init(){
 	console.log("Init!");
-	directionsDisplay = new google.maps.DirectionsRenderer();
-	start = '';
-	end = '';
-	lastopened = {};
-	detours = new Array();
-	VENUES = {};
-	GAS = {};
-
-	time =0;
-	detourCount = 0;
-	detours = new Array();
-	availableDetours = new Array();
-	VENUES = {};
-	VenueCount = 0;
-	VenueTotal = 0;
-	GASCount =0;
-	GASTotal=0;
 
 	var mapOptions = 
 	{
 		zoom: 8,
-		center: new google.maps.LatLng((39.952335), -75.163789),
+		center: new google.maps.LatLng((39.952335), -75.163789), //currently defaults to over Philadelphia
 		mapTypeId: google.maps.MapTypeId.ROADMAP
 	}
 	map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
@@ -87,8 +60,8 @@ function init(){
     var startElement = document.getElementById("start-loc");
     var endElement = document.getElementById("end-loc");
     var radius = document.getElementById("distance");
-
     var attractionButton = document.getElementById('sites-button');
+
     attractionButton.addEventListener('click', function()
     {
     	console.log("attractionButton clicked!");
@@ -121,7 +94,7 @@ function init(){
 
 
 
-    
+    //these are obsolute
     startElement.addEventListener('blur',startendChange);
     endElement.addEventListener('blur',startendChange);
     radius.addEventListener('blur', startendChange);
@@ -248,7 +221,7 @@ function getVenues(i)
 
 
 	if(isFourSquare === true)
-		var URL = config.apiUrl + 'v2/venues/explore?ll=' + GPSCoords[i] + '&limit=5' + '&radius=' + RADIUS.toString() + '&categoryId=' + CATEGORIES +  '&client_id=' +  config.apiKey + '&client_secret=' + config.clientSecret;
+		var URL = FSconfig.apiUrl + 'v2/venues/explore?ll=' + GPSCoords[i] + '&limit=5' + '&radius=' + RADIUS.toString() + '&categoryId=' + CATEGORIES +  '&client_id=' +  FSconfig.apiKey + '&client_secret=' + FSconfig.clientSecret;
 	$.getJSON(URL, function(data){
 		VenueCount++;
 		VENUES[data.response.groups[0].items[0].venue.id] = {name: data.response.groups[0].items[0].venue.name, lat: data.response.groups[0].items[0].venue.location.lat, lng: data.response.groups[0].items[0].venue.location.lng, link: data.response.groups[0].items[0].venue.canonicalUrl}
@@ -384,6 +357,8 @@ function reRoute()
 
 function getTravelTime()
 {
-	return di
+	return di;
 }
+
+
 google.maps.event.addDomListener(window, 'load', init);
