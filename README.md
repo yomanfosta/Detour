@@ -15,6 +15,8 @@ DEVELOPER NOTES:
 
 Josh is currently working on bug fixes in the original hackathon release and working on reorganizing the source code a bit better in maps.js. He is working on the AfterThoughts branch.
 
+Una will be working on the Una-PostHack branch to improve UX and other fun visual things :)
+
 BUGS:
 Detours not clearing on destination/origin changes
 Directions are rendered on 'blur' events of major controls... should be on GO button

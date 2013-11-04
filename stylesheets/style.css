@@ -481,10 +481,10 @@ html {
 
 /* line 1, ../sass/_directions.scss */
 #directions {
-  -webkit-transition-duration: 0.6s;
-  -moz-transition-duration: 0.6s;
-  -o-transition-duration: 0.6s;
-  transition-duration: 0.6s;
+  -webkit-transition-duration: 0.4s;
+  -moz-transition-duration: 0.4s;
+  -o-transition-duration: 0.4s;
+  transition-duration: 0.4s;
   background: white;
   height: 100%;
   margin-top: -50px;
